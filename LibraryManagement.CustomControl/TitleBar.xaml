@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="LibraryManagement.CustomControl.TitleBar"
+       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+       xmlns:local="clr-namespace:LibraryManagement.CustomControl"
+       mc:Ignorable="d" Foreground="White"
+      
+       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+       x:Name="ucTitleBar" MouseLeftButtonDown="ucTitleBar_MouseLeftButtonDown">
+
+   <UserControl.Resources>
+      <ResourceDictionary>
+         <ResourceDictionary.MergedDictionaries>
+            <!-- Include the MaterialDesignThemes and MaterialDesignColors style -->
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
+            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+         </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+   </UserControl.Resources>
+
+   <local:DragMoveGrid x:Name="containerGrid" Margin="2">
+      <!--Title Text-->
+      <TextBlock FontSize="{Binding Path=FontSize, ElementName=ucTitleBar}" 
+                 FontWeight="{Binding Path=FontWeight, ElementName=ucTitleBar}"
+                 FontFamily="{Binding Path=FontFamily, ElementName=ucTitleBar}"
+                 FontStretch="{Binding Path=FontStretch, ElementName=ucTitleBar}"
+                 FontStyle="{Binding Path=FontStyle, ElementName=ucTitleBar}"
+                 Foreground="{Binding Path=Foreground, ElementName=ucTitleBar}"
+                 HorizontalAlignment="Center" VerticalAlignment="Center" 
+                 Text="{Binding Path=Tag, ElementName=ucTitleBar}">
+      </TextBlock>
+
+      <!-- Window option-->
+      <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0">
+         <StackPanel.Resources>
+            <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+               <Setter Property="Background" Value="{x:Null}"/>
+               <Setter Property="BorderBrush" Value="{x:Null}"/>
+               <Setter Property="HorizontalAlignment" Value="Center"/>
+               <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+         </StackPanel.Resources>
+
+         <!-- Minimize Window -->
+         <Button ToolTip="Minimize" x:Name="btnMinimizeWindow" Click="btnMinimizeWindow_Click"
+                 Foreground="{Binding ElementName=ucTitleBar, Path=Foreground}"
+                 Height="{Binding ElementName=containerGrid, Path=ActualHeight}"
+                 Width="{Binding ElementName=btnMinimizeWindow, Path=ActualHeight}">
+            <materialDesign:PackIcon Kind="WindowMinimize" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                     Width="{Binding ElementName=btnCloseWindow, Path=ActualWidth}"
+                                     Height="{Binding ElementName=btnCloseWindow, Path=ActualHeight}">
+            </materialDesign:PackIcon>
+         </Button>
+
+         <!-- Maximize Window -->
+         <Button ToolTip="Maximize" x:Name="btnMaximizeWindow" Click="btnMaximizeWindow_Click"
+                 Foreground="{Binding ElementName=ucTitleBar, Path=Foreground}"
+                 Height="{Binding ElementName=containerGrid, Path=ActualHeight}"
+                 Width="{Binding ElementName=btnMaximizeWindow, Path=ActualHeight}">
+            <materialDesign:PackIcon Kind="WindowMaximize" x:Name="iconWindowMaximize" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                     Width="{Binding ElementName=btnCloseWindow, Path=ActualWidth}"
+                                     Height="{Binding ElementName=btnCloseWindow, Path=ActualHeight}">
+            </materialDesign:PackIcon>
+         </Button>
+
+         <!-- Close Window -->
+         <Button ToolTip="Close" x:Name="btnCloseWindow" Click="btnCloseWindow_Click"
+                 Foreground="{Binding ElementName=ucTitleBar, Path=Foreground}"
+                 Height="{Binding ElementName=containerGrid, Path=ActualHeight}"
+                 Width="{Binding ElementName=btnCloseWindow, Path=ActualHeight}">
+            <materialDesign:PackIcon Kind="WindowClose" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                     Width="{Binding ElementName=btnCloseWindow, Path=ActualWidth}"
+                                     Height="{Binding ElementName=btnCloseWindow, Path=ActualHeight}">
+            </materialDesign:PackIcon>
+            <Button.Style>
+               <!--Set red bacground when mouse hover-->
+               <Style TargetType="{x:Type Button}">
+                  <Setter Property="Background" Value="{x:Null}"/>
+                  <Setter Property="BorderBrush" Value="{x:Null}"/>
+                  <Setter Property="HorizontalAlignment" Value="Center"/>
+                  <Setter Property="VerticalAlignment" Value="Center"/>
+                  <Setter Property="Template">
+                     <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                           <Border x:Name="Border" Background="Transparent">
+                              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                           </Border>
+                           <ControlTemplate.Triggers>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                 <Setter Property="Background" Value="#FF5969" TargetName="Border" />
+                              </Trigger>
+                           </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                     </Setter.Value>
+                  </Setter>
+               </Style>
+            </Button.Style>
+         </Button>
+      </StackPanel>
+   </local:DragMoveGrid>
+</UserControl>

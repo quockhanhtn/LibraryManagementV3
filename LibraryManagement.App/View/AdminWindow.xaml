@@ -1,0 +1,248 @@
+﻿<Window x:Class="LibraryManagement.View.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibraryManagement.View" mc:Ignorable="d"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
+
+        FontFamily="{StaticResource Roboto}" Icon="{StaticResource LibraryIcon}"
+        Title="Library Manager - Admin Window" x:Name="adminWindow"
+        Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
+        Height="768" Width="1366" MinHeight="500" MinWidth="500">
+
+   <Window.Resources>
+      <Storyboard x:Key="OpenMenu">
+         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="gridMenu">
+            <EasingDoubleKeyFrame KeyTime="0" Value="60" />
+            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="300" />
+         </DoubleAnimationUsingKeyFrames>
+      </Storyboard>
+      <Storyboard x:Key="CloseMenu">
+         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="gridMenu">
+            <EasingDoubleKeyFrame KeyTime="0" Value="300" />
+            <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="60" />
+         </DoubleAnimationUsingKeyFrames>
+      </Storyboard>
+   </Window.Resources>
+
+   <Window.Triggers>
+      <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnOpenMenu">
+         <BeginStoryboard Storyboard="{StaticResource OpenMenu}" />
+      </EventTrigger>
+      <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnCloseMenu">
+         <BeginStoryboard Storyboard="{StaticResource CloseMenu}" />
+      </EventTrigger>
+   </Window.Triggers>
+
+   <i:Interaction.Triggers>
+      <i:EventTrigger EventName="Loaded">
+         <i:InvokeCommandAction Command="{Binding LoadedWindow}" CommandParameter="{Binding ElementName=adminWindow}" />
+      </i:EventTrigger>
+   </i:Interaction.Triggers>
+
+   <Border Style="{StaticResource WindowBoder}">
+      <Grid>
+         <Grid.Resources>
+            <Style TargetType="TextBlock">
+               <Setter Property="Foreground" Value="White" />
+               <Setter Property="VerticalAlignment" Value="Center" />
+               <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+            <Style TargetType="materialDesign:PackIcon">
+               <Setter Property="Height" Value="40" />
+               <Setter Property="Width" Value="40" />
+               <Setter Property="HorizontalAlignment" Value="Center" />
+               <Setter Property="VerticalAlignment" Value="Center" />
+               <Setter Property="Foreground" Value="White" />
+            </Style>
+         </Grid.Resources>
+
+         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+         </Grid.RowDefinitions>
+
+         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition />
+         </Grid.ColumnDefinitions>
+
+         <!--Title bar-->
+         <cc:TitleBar x:Name="titleBar" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
+                      Tag="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                      FontSize="16" Height="24" Background="#007acc" >
+         </cc:TitleBar>
+
+         <!--mainGrid - contain page-->
+         <Grid x:Name="gridMain" Background="DarkGray" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1" Grid.Row="1" />
+
+         <!--Navigation-->
+         <Grid x:Name="gridMenu" Width="60" HorizontalAlignment="Left" Background="#001e51" Grid.RowSpan="2" Grid.Column="0">
+            <StackPanel>
+               <!--Button open/hide nav-->
+               <Grid Height="80" RenderTransformOrigin="0.5,0.5">
+                  <Grid.RenderTransform>
+                     <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform />
+                     </TransformGroup>
+                  </Grid.RenderTransform>
+
+                  <!--Button Show Menu-->
+                  <Button x:Name="btnOpenMenu" Height="60" Width="60" Margin="5"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Style="{StaticResource MaterialDesignFlatButton}"
+                          Background="{x:Null}" BorderBrush="{x:Null}"
+                          Click="ButtonOpenMenu_Click">
+                     <materialDesign:PackIcon Kind="Menu" Foreground="White" />
+                  </Button>
+
+                  <!--Button Hidden Menu-->
+                  <Button x:Name="btnCloseMenu" Visibility="Collapsed" Height="60" Width="auto" Margin="5"
+                          HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                          Style="{StaticResource MaterialDesignFlatButton}"
+                          Background="{x:Null}" BorderBrush="{x:Null}"
+                          Click="ButtonCloseMenu_Click">
+                     <materialDesign:PackIcon Kind="ArrowLeft" />
+                  </Button>
+               </Grid>
+
+               <Grid Width="auto">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="auto" />
+                     <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+
+                  <!--Cursor-->
+                  <Grid x:Name="gridCursor" Width="2" Background="White" Height="60" VerticalAlignment="Top"></Grid>
+
+                  <!--Navigation item-->
+                  <ListView x:Name="lvNavigationMenu" Grid.Column="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                     <ListView.Resources>
+                        <Style TargetType="TextBlock">
+                           <Setter Property="FontSize" Value="20" />
+                           <Setter Property="FontWeight" Value="Thin" />
+                           <Setter Property="VerticalAlignment" Value="Center" />
+                           <Setter Property="Foreground" Value="White" />
+                        </Style>
+                        <Style TargetType="materialDesign:PackIcon">
+                           <Setter Property="Width" Value="60" />
+                           <Setter Property="Height" Value="40" />
+                           <Setter Property="Margin" Value="-10 0 0 0" />
+                           <Setter Property="Foreground" Value="White" />
+                        </Style>
+                     </ListView.Resources>
+
+                     <!--Event select menu item changed-->
+                     <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                           <i:InvokeCommandAction Command="{Binding NavSelectionChangedCommand}"
+                                                  CommandParameter="{Binding ElementName=adminWindow}">
+                           </i:InvokeCommandAction>
+                        </i:EventTrigger>
+                     </i:Interaction.Triggers>
+
+                     <!--Quản lý thủ thư-->
+                     <ListViewItem x:Name="mnuManagerLibrarian" Height="60" ToolTip="Quản lý thủ thư">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="PersonBoxMultiple" />
+                           <TextBlock Text="Quản lý" />
+                           <TextBlock Text=" Thủ thư" FontWeight="SemiBold" />
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Quản lý độc giả-->
+                     <ListViewItem x:Name="mnuManagerMember" Height="60" ToolTip="Quản lý độc giả">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="AccountGroup" />
+                           <TextBlock>
+                              <Run Text="Quản lý"/>
+                              <Run Text="Độc giả" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Quản lý sách-->
+                     <ListViewItem x:Name="mnuManagerBook" Height="60" ToolTip="Quản lý sách">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="BookMultiple" />
+                           <TextBlock>
+                              <Run Text="Quản lý"/>
+                              <Run Text="Sách" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Quản lý Nhà xuất bản-->
+                     <ListViewItem x:Name="mnuManagerPublisher" Height="60" ToolTip="Quản lý nhà xuất bản">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="ChartHome" />
+                           <TextBlock>
+                              <Run Text="Quản lý"/>
+                              <Run Text="Nhà xuất bản" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Quản lý chuyên mục sách-->
+                     <ListViewItem x:Name="mnuManagerBookCategory" Height="60" ToolTip="Quản lý chuyên mục sách">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="Category" />
+                           <TextBlock>
+                              <Run Text="Quản lý"/>
+                              <Run Text="Chuyên mục sách" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Quản lý tác giả-->
+                     <ListViewItem x:Name="mnuManagerAuthor" Height="60" ToolTip="Quản lý tác giả">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="FountainPenTip" />
+                           <TextBlock>
+                              <Run Text="Quản lý"/>
+                              <Run Text="Tác giả" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Thống kế, báo cáo-->
+                     <ListViewItem x:Name="mnuStatistic" Height="60" ToolTip="Thống kê, báo cáo">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="FileReport" />
+                           <TextBlock Text="Trang" />
+                           <TextBlock Text=" Thống kê" FontWeight="SemiBold" />
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Thông tin phần mềm-->
+                     <ListViewItem x:Name="mnuAbout" Height="60" ToolTip="Thông tin phân mềmm">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="AboutCircle" />
+                           <TextBlock>
+                              <Run Text="Thông tin"/>
+                              <Run Text="Phần mềm" FontWeight="SemiBold"/>
+                           </TextBlock>
+                        </StackPanel>
+                     </ListViewItem>
+
+                     <!--Đăng xuất-->
+                     <ListViewItem x:Name="mnuLogout" Height="60" ToolTip="Đăng xuất">
+                        <StackPanel Orientation="Horizontal">
+                           <materialDesign:PackIcon Kind="Logout" />
+                           <TextBlock Text="Đăng xuất" FontWeight="SemiBold" />
+                        </StackPanel>
+                     </ListViewItem>
+                  </ListView>
+               </Grid>
+            </StackPanel>
+         </Grid>
+      </Grid>
+   </Border>
+</Window>

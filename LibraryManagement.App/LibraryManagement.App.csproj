@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{590E7609-CEC9-4ACA-A7A7-DEE8CB2D3EF4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>LibraryManagement</RootNamespace>
+    <AssemblyName>LibraryManagement.App</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dragablz, Version=0.0.3.223, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dragablz.0.0.3.223\lib\net45\Dragablz.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=5.4.2.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.4.2\lib\net45\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.2.7.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.2.7\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=3.2.0.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.3.2.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.5.0.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Model\Definition.cs" />
+    <Compile Include="Model\DataAccessLayer\BookCategoryDAL.cs" />
+    <Compile Include="Model\DataAccessLayer\LibrarianDAL.cs" />
+    <Compile Include="Model\DataAccessLayer\UserDAL.cs" />
+    <Compile Include="Model\ExtensionEntityModel\BaseEntityModel.cs" />
+    <Compile Include="Model\ExtensionEntityModel\BookCategory.cs" />
+    <Compile Include="Model\ExtensionEntityModel\Librarian.cs" />
+    <Compile Include="Model\Enum\EStatusFillter.cs" />
+    <Compile Include="Model\ExtensionEntityModel\User.cs" />
+    <Compile Include="Model\Interface\IDataAccessLayer.cs" />
+    <Compile Include="Model\Interface\ObjectDTO.cs" />
+    <Compile Include="ViewModel\AdminWindowViewModel.cs" />
+    <Compile Include="ViewModel\BaseObject\BasePageManagerViewModel.cs" />
+    <Compile Include="ViewModel\BaseObject\BaseViewModel.cs" />
+    <Compile Include="ViewModel\LibrarianWindowViewModel.cs" />
+    <Compile Include="ViewModel\LoginWindowViewModel.cs" />
+    <Compile Include="ViewModel\MemberWindowViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageAboutViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerAuthorViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerBookCategoryViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerBookViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerLibrarianViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerMemberViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageManagerPublisherViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageStatisticViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageUserInfoViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModel\PageViewListBorrowBookViewModel.cs" />
+    <Compile Include="View\AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LibrarianWindow.xaml.cs">
+      <DependentUpon>LibrarianWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\MemberWindow.xaml.cs">
+      <DependentUpon>MemberWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageAbout.xaml.cs">
+      <DependentUpon>PageAbout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerAuthor.xaml.cs">
+      <DependentUpon>PageManagerAuthor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerBook.xaml.cs">
+      <DependentUpon>PageManagerBook.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerBookCategory.xaml.cs">
+      <DependentUpon>PageManagerBookCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerLibrarian.xaml.cs">
+      <DependentUpon>PageManagerLibrarian.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerMember.xaml.cs">
+      <DependentUpon>PageManagerMember.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageManagerPublisher.xaml.cs">
+      <DependentUpon>PageManagerPublisher.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageStatistic.xaml.cs">
+      <DependentUpon>PageStatistic.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageUserInfo.xaml.cs">
+      <DependentUpon>PageUserInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Page\PageViewListBorrowBook.xaml.cs">
+      <DependentUpon>PageViewListBorrowBook.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Resources\ResourceXAML\ControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ResourceXAML\MainResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\AdminWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LibrarianWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MemberWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageAbout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerAuthor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerBook.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerBookCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerLibrarian.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerMember.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageManagerPublisher.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageStatistic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageUserInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Page\PageViewListBorrowBook.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Model\Author.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BookCategory.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BookInfo.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BookItem.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Borrow.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\EFProvider.cs" />
+    <Compile Include="Model\Librarian.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\LibraryManagementModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibraryManagementModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\LibraryManagementModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\LibraryManagementModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LibraryManagementModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Member.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Publisher.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Return.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\User.cs">
+      <DependentUpon>LibraryManagementModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EntityDeploy Include="Model\LibraryManagementModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LibraryManagementModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\LibraryManagementModel.edmx.diagram">
+      <DependentUpon>LibraryManagementModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Black.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Bold.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-ExtraBold.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Light.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Medium.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Regular.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-SemiBold.ttf" />
+    <Resource Include="Resources\Fonts\BigShouldersInlineText\BigShouldersInlineText-Thin.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Black.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-BlackItalic.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Bold.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-BoldItalic.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Italic.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Light.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-LightItalic.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Medium.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-MediumItalic.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Regular.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-Thin.ttf" />
+    <Resource Include="Resources\Fonts\Roboto\Roboto-ThinItalic.ttf" />
+    <None Include="Resources\Images\Icons\library-ico.psd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryManagement.CustomControl\LibraryManagement.CustomControl.csproj">
+      <Project>{a45fbdf1-30e5-41ce-a4a9-e0ac7f3b3831}</Project>
+      <Name>LibraryManagement.CustomControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LibraryManagement.Utils\LibraryManagement.Utils.csproj">
+      <Project>{d5400399-8fe8-4b5a-9d26-a33139b25351}</Project>
+      <Name>LibraryManagement.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\LibraryManagementModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LibraryManagementModel.edmx</DependentUpon>
+      <LastGenOutput>LibraryManagementModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\LibraryManagementModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LibraryManagementModel.edmx</DependentUpon>
+      <LastGenOutput>LibraryManagementModel.cs</LastGenOutput>
+    </Content>
+    <Resource Include="Resources\Images\Icons\library-ico.ico" />
+    <Resource Include="Resources\Images\login-window-background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.3.2.0\build\MaterialDesignThemes.targets'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

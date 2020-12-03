@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:viewmodel="clr-namespace:LibraryManagement.ViewModel">
+   <!-- Include font family-->
+   <FontFamily x:Key="Roboto">/LibraryManagement.App;component/Resources/Fonts/Roboto#Roboto</FontFamily>
+   <FontFamily x:Key="BigShouldersInlineText">/LibraryManagement.App;component/Resources/Fonts/BigShouldersInlineText/#Big Shoulders Inline Text</FontFamily>
+   
+   <!-- Icon -->
+   <BitmapImage x:Key="LibraryIcon">/LibraryManagement.App;component/Resources/Images/Icons/library-ico.ico</BitmapImage>
+
+
+   <!--Define value for page-->
+   <Brush x:Key="PageBackgroundColor">#fafafa</Brush>
+   <Brush x:Key="PageForegroundColor">#000</Brush>
+   <sys:Double x:Key="PageDesignHeight">734</sys:Double>
+   <sys:Double x:Key="PageDesignWidth">1300</sys:Double>
+
+   <!-- ViewModel object -->
+   <viewmodel:LoginWindowViewModel x:Key="LoginWindowVM"/>
+   
+</ResourceDictionary>

@@ -1,7 +1,11 @@
-﻿namespace LibraryManagement.Model
+﻿using LibraryManagement.Utils;
+
+namespace LibraryManagement.Model
 {
-   public partial class Librarian : BaseEntityModel
+   public partial class Librarian
    {
-      public string DisplayStatus { get => User.UserStatus ? "Đang làm" : "Đã nghỉ"; }
+      public string StatusDisplay { get => User.UserStatus ? "Đang làm" : "Đã nghỉ"; }
+
+      public string SalaryStr { get => Salary.ToString(); set => Salary = value.RemoveNonDigit().ToDecimal(); }
    }
 }

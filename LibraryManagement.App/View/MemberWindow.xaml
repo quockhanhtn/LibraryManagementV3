@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LibraryManagement.View" mc:Ignorable="d"
-        
+
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
@@ -73,8 +73,8 @@
 
          <!--Title bar-->
          <cc:TitleBar x:Name="titleBar" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"
-                      Tag="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                      FontSize="16" Height="24" Background="#007acc" >
+                      Tag="{Binding WindowTitle, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      FontSize="16" Height="24" Background="#007acc">
          </cc:TitleBar>
 
          <!--mainGrid - contain page-->
@@ -153,19 +153,19 @@
                         <StackPanel Orientation="Horizontal">
                            <materialDesign:PackIcon Kind="LetterACircle" />
                            <TextBlock>
-                              <Run Text="Thông tin"/>
-                              <Run Text="Tài khoản" FontWeight="SemiBold"/>
+                              <Run Text="Thông tin" />
+                              <Run Text="Tài khoản" FontWeight="SemiBold" />
                            </TextBlock>
                         </StackPanel>
                      </ListViewItem>
-                     
+
                      <!--Các sách đang mượn-->
                      <ListViewItem x:Name="mnuListBookBorrow" Height="60" ToolTip="Quản lý thủ thư">
                         <StackPanel Orientation="Horizontal">
                            <materialDesign:PackIcon Kind="BookMultiple" />
                            <TextBlock>
-                              <Run Text="Các sách"/>
-                              <Run Text="Đang mượn" FontWeight="SemiBold"/>
+                              <Run Text="Các sách" />
+                              <Run Text="Đang mượn" FontWeight="SemiBold" />
                            </TextBlock>
                         </StackPanel>
                      </ListViewItem>
@@ -175,8 +175,8 @@
                         <StackPanel Orientation="Horizontal">
                            <materialDesign:PackIcon Kind="AboutCircle" />
                            <TextBlock>
-                              <Run Text="Thông tin"/>
-                              <Run Text="Phần mềm" FontWeight="SemiBold"/>
+                              <Run Text="Thông tin" />
+                              <Run Text="Phần mềm" FontWeight="SemiBold" />
                            </TextBlock>
                         </StackPanel>
                      </ListViewItem>

@@ -4,6 +4,8 @@
    {
       public static string Gender(string gender)
       {
+         if (string.IsNullOrEmpty(gender)) { return "Khác"; }
+
          if (gender.ToLower().StartsWith("f"))
          {
             return "Nữ";

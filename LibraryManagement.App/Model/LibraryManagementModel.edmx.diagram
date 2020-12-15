@@ -4,28 +4,28 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9540c8c4928447389e9e90166b842a94" Name="Diagram1">
-        <EntityTypeShape EntityType="LibraryManagementModel.Author" Width="1.5" PointX="1.5" PointY="20.5" />
-        <EntityTypeShape EntityType="LibraryManagementModel.BookCategory" Width="1.5" PointX="1.5" PointY="17.75" />
-        <EntityTypeShape EntityType="LibraryManagementModel.BookInfo" Width="1.5" PointX="0.75" PointY="9.625" />
-        <EntityTypeShape EntityType="LibraryManagementModel.BookItem" Width="1.5" PointX="3" PointY="10.625" />
-        <EntityTypeShape EntityType="LibraryManagementModel.Borrow" Width="1.5" PointX="5.25" PointY="2.5" />
-        <EntityTypeShape EntityType="LibraryManagementModel.Librarian" Width="1.5" PointX="3" PointY="4.25" />
-        <EntityTypeShape EntityType="LibraryManagementModel.Member" Width="1.5" PointX="3" PointY="1.5" />
-        <EntityTypeShape EntityType="LibraryManagementModel.Publisher" Width="1.5" PointX="1.5" PointY="14.5" />
-        <EntityTypeShape EntityType="LibraryManagementModel.Return" Width="1.5" PointX="7.5" PointY="3.5" />
-        <EntityTypeShape EntityType="LibraryManagementModel.User" Width="1.5" PointX="0.75" PointY="1.875" />
-        <AssociationConnector Association="LibraryManagementModel.PK_BookInfo_BookCategory" />
-        <AssociationConnector Association="LibraryManagementModel.fk_book_book_item" />
-        <AssociationConnector Association="LibraryManagementModel.PK_BookInfo_Publisher" />
-        <AssociationConnector Association="LibraryManagementModel.pk_borrow_book_item" />
-        <AssociationConnector Association="LibraryManagementModel.fk_borrow_librarian" />
-        <AssociationConnector Association="LibraryManagementModel.fk_borrow_member" />
-        <AssociationConnector Association="LibraryManagementModel.fk_return_borrow" />
-        <AssociationConnector Association="LibraryManagementModel.fk_return_librarian" />
-        <AssociationConnector Association="LibraryManagementModel.fk_user_librarian" />
-        <AssociationConnector Association="LibraryManagementModel.fk_user_member" />
-        <AssociationConnector Association="LibraryManagementModel.BookAuthor" />
+      <Diagram DiagramId="6a59e176e4ca4d0bbbce843ea1f75bab" Name="Diagram1">
+        <EntityTypeShape EntityType="LibraryManagement.Model.Author" Width="1.5" PointX="1.5" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.BookCategory" Width="1.5" PointX="1.5" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.BookInfo" Width="1.5" PointX="0.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.BookItem" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.Borrow" Width="1.5" PointX="5.25" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.Librarian" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.Member" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.Publisher" Width="1.5" PointX="1.5" PointY="20" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.Return" Width="1.5" PointX="7.5" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LibraryManagement.Model.User" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
+        <AssociationConnector Association="LibraryManagement.Model.PK_BookInfo_BookCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_book_book_item" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.PK_BookInfo_Publisher" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.pk_borrow_book_item" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_borrow_librarian" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_borrow_member" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_return_borrow" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_return_librarian" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_user_librarian" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.fk_user_member" ManuallyRouted="false" />
+        <AssociationConnector Association="LibraryManagement.Model.BookAuthor" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

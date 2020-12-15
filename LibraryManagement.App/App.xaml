@@ -13,7 +13,7 @@
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
 
             <!-- Include the Dragablz Material Design style -->
-            <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
+            <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml" />
 
             <!-- Include your primary palette -->
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Indigo.xaml" />
@@ -22,26 +22,26 @@
             <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.Yellow.xaml" />
 
             <!-- Custom Static Resouces -->
-            <ResourceDictionary Source="/Resources/ResourceXAML/ControlStyle.xaml"/>
-            <ResourceDictionary Source="/Resources/ResourceXAML/MainResource.xaml"/>
+            <ResourceDictionary Source="/Resources/ResourceXAML/ControlStyle.xaml" />
+            <ResourceDictionary Source="/Resources/ResourceXAML/MainResource.xaml" />
 
             <ResourceDictionary>
                <!-- Primary color -->
                <!-- Include three hues from the primary palette (and the associated forecolours). Do not rename, keep in sequence; light to dark.-->
-               <!-- <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}"/>
-                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary900}"/>
-                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary900Foreground}"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}"/>
-                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}"/> -->
+               <!-- <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary100}" />
+                    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary100Foreground}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary900}" />
+                    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary900Foreground}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}" />
+                    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}" /> -->
 
-               <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#007acc"/>
-               <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#001e51"/>
+               <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#007acc" />
+               <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="#001e51" />
 
                <!-- Secondary color -->
                <!-- Include a single secondary accent color (and the associated forecolour) -->
-               <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#001e51"/>
-               <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#001e51"/>
+               <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#001e51" />
+               <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#001e51" />
             </ResourceDictionary>
          </ResourceDictionary.MergedDictionaries>
       </ResourceDictionary>

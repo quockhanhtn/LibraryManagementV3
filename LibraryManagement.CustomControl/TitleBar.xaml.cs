@@ -28,10 +28,9 @@ namespace LibraryManagement.CustomControl
          InitializeComponent();
       }
 
-      private void btnMinimizeWindow_Click(object sender, RoutedEventArgs e)
+      private void BtnMinimizeWindow_Click(object sender, RoutedEventArgs e)
       {
-         var window = this.GetRootParent() as Window;
-         if (window != null)
+         if (this.GetRootParent() is Window window)
          {
             if (window.WindowState != WindowState.Minimized)
             {
@@ -40,10 +39,9 @@ namespace LibraryManagement.CustomControl
          }
       }
 
-      private void btnMaximizeWindow_Click(object sender, RoutedEventArgs e)
+      private void BtnMaximizeWindow_Click(object sender, RoutedEventArgs e)
       {
-         var window = this.GetRootParent() as Window;
-         if (window != null)
+         if (this.GetRootParent() is Window window)
          {
             if (window.WindowState != WindowState.Maximized)
             {
@@ -60,19 +58,17 @@ namespace LibraryManagement.CustomControl
          }
       }
 
-      private void btnCloseWindow_Click(object sender, RoutedEventArgs e)
+      private void BtnCloseWindow_Click(object sender, RoutedEventArgs e)
       {
-         var window = this.GetRootParent() as Window;
-         if (window != null)
+         if (this.GetRootParent() is Window window)
          {
             window.Close();
          }
       }
 
-      private void ucTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+      private void UcTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
-         var window = this.GetRootParent() as System.Windows.Window;
-         if (window != null)
+         if (this.GetRootParent() is System.Windows.Window window)
          {
             try { window.DragMove(); }
             catch (Exception) { }

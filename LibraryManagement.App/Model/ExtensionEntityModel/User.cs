@@ -1,9 +1,19 @@
-﻿namespace LibraryManagement.Model
+﻿using LibraryManagement.Utils;
+using System.Windows;
+using System.Windows.Media;
+
+namespace LibraryManagement.Model
 {
-   public partial class User : BaseEntityModel
+   public partial class User
    {
       public string FullName { get => (this.LastName + " " + this.FirstName).Trim(); }
-      public string GenderDisplay { get => Utils.FormatUtils.Gender(this.Gender); set => GenderDisplay = value; }
+      public string GenderDisplay
+      {
+         get => FormatUtils.Gender(this.Gender);
+         set => Gender = ConvertGender(value);
+      }
+
+      public ImageSource ImageDisplay { get => Base64Utils.Decode.ToImageSource(this.Image) ?? Application.Current.TryFindResource("DefaultUserImage") as ImageSource; }
 
       public static string ConvertGender(string gender)
       {

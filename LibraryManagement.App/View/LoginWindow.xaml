@@ -4,36 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LibraryManagement.View" mc:Ignorable="d"
-        
+
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl" 
-        
+        xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
+
         FontFamily="{StaticResource Roboto}" Icon="{StaticResource LibraryIcon}"
         Title="Đăng nhập - Library Management" x:Name="loginWindow" DataContext="{StaticResource LoginWindowVM}"
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen"
-        Height="500" Width="900" MinHeight="500" MinWidth="454" >
+        Height="500" Width="900" MinHeight="500" MinWidth="454">
    <Border Style="{StaticResource WindowBoder}">
       <cc:DragMoveGrid>
          <!--
-            Background is edited from Designed by macrovector / Freepik 
+            Background is edited from Designed by macrovector / Freepik
             https://www.freepik.com/free-vector/online-library-isometric-background-with-human-characters-electronic-gadgets-pile-books-with-editable-text_7380029.htm
          -->
          <Image Stretch="Fill" StretchDirection="Both" Source="/Resources/Images/login-window-background.jpg" />
 
          <!--Title bar-->
-         <cc:TitleBar Height="30" MaximinButtonVisibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top"/>
+         <cc:TitleBar Height="30" MaximinButtonVisibility="Collapsed" Background="Transparent" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Top" />
 
          <materialDesign:Card Width="420" Margin="25" HorizontalAlignment="Left">
             <Grid Margin="0">
                <Grid.Resources>
                   <Style TargetType="materialDesign:PackIcon">
-                     <Setter Property="Background" Value="{x:Null}"/>
-                     <Setter Property="HorizontalAlignment" Value="Center"/>
-                     <Setter Property="VerticalAlignment" Value="Center"/>
-                     <Setter Property="Height" Value="32"/>
-                     <Setter Property="Width" Value="32"/>
+                     <Setter Property="Background" Value="{x:Null}" />
+                     <Setter Property="HorizontalAlignment" Value="Center" />
+                     <Setter Property="VerticalAlignment" Value="Center" />
+                     <Setter Property="Height" Value="32" />
+                     <Setter Property="Width" Value="32" />
                   </Style>
                </Grid.Resources>
 
@@ -50,14 +50,14 @@
 
                            <!--User name input field-->
                            <DockPanel LastChildFill="True" Margin="0 0 0 20">
-                              <materialDesign:PackIcon Grid.Column="0" Kind="Person"/>
+                              <materialDesign:PackIcon Grid.Column="0" Kind="Person" />
                               <TextBox Grid.Column="1" Margin="20 0 0 0" Foreground="#001e51" FontSize="20" x:Name="txtLoginUid"
-                                       materialDesign:HintAssist.Foreground="#007acc" 
+                                       materialDesign:HintAssist.Foreground="#007acc"
                                        materialDesign:TextFieldAssist.UnderlineBrush="#007acc"
-                                       Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                                       Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                        Text="{Binding Path=LoginUsername, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Tên đăng nhập hoặc email" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Tên đăng nhập hoặc email" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                               </TextBox>
                            </DockPanel>
@@ -65,11 +65,11 @@
                            <!--Password input field-->
                            <Grid Margin="0 20 0 20">
                               <Grid.ColumnDefinitions>
-                                 <ColumnDefinition Width="auto"/>
-                                 <ColumnDefinition/>
-                                 <ColumnDefinition Width="auto"/>
+                                 <ColumnDefinition Width="auto" />
+                                 <ColumnDefinition />
+                                 <ColumnDefinition Width="auto" />
                               </Grid.ColumnDefinitions>
-                              <materialDesign:PackIcon Kind="Key" Grid.Column="0"/>
+                              <materialDesign:PackIcon Kind="Key" Grid.Column="0" />
 
                               <!-- Password box mật khẩu, hiện khi ẩn pass -->
                               <PasswordBox x:Name="pwbLoginPassword" Grid.Column="1" MaxLength="32" Margin="20 0 0 0" Foreground="#001e51" FontSize="20"
@@ -77,11 +77,11 @@
                                            Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                            Visibility="{Binding Path=LoginPasswordBoxVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                                  <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="PasswordChanged">
-                                       <i:InvokeCommandAction Command="{Binding LoginPasswordChangedCommand}" 
+                                       <i:InvokeCommandAction Command="{Binding LoginPasswordChangedCommand}"
                                                               CommandParameter="{Binding ElementName=pwbLoginPassword}">
                                        </i:InvokeCommandAction>
                                     </i:EventTrigger>
@@ -95,27 +95,27 @@
                                        Text="{Binding Path=LoginPassword, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                        Visibility="{Binding Path=LoginPasswordTextboxVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                               </TextBox>
 
-                              <Button Grid.Column="2" Width="35" Height="35" HorizontalAlignment="Right" 
-                                      Style="{StaticResource MaterialDesignIconButton}" 
-                                      Command="{Binding ShowPasswordCommand}" 
+                              <Button Grid.Column="2" Width="35" Height="35" HorizontalAlignment="Right"
+                                      Style="{StaticResource MaterialDesignIconButton}"
+                                      Command="{Binding ShowPasswordCommand}"
                                       CommandParameter="{Binding ElementName=icoEye}">
-                                 <materialDesign:PackIcon x:Name="icoEye" Kind="Visibility" Foreground="#001e51"/>
+                                 <materialDesign:PackIcon x:Name="icoEye" Kind="Visibility" Foreground="#001e51" />
                               </Button>
                            </Grid>
 
                            <!---->
-                           <TextBlock Visibility="{Binding LoginFailedVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
-                                      Text="Sai tên đăng nhập hoặc mật khẩu !" Foreground="#FE5969" FontSize="16" Margin="50 10 0 0"/>
+                           <TextBlock Visibility="{Binding LoginFailedVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      Text="Sai tên đăng nhập hoặc mật khẩu !" Foreground="#FE5969" FontSize="16" Margin="50 10 0 0" />
 
                            <!--Forgotten account-->
                            <TextBlock Margin="50 0 0 0" Text="Quên mật khẩu ?" FontSize="16" Style="{StaticResource LinkTextBlock}">
                               <i:Interaction.Triggers>
                                  <i:EventTrigger EventName="MouseDown">
-                                    <i:InvokeCommandAction Command="{Binding LostPasswordCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding LostPasswordCommand}" />
                                  </i:EventTrigger>
                               </i:Interaction.Triggers>
                            </TextBlock>
@@ -134,54 +134,54 @@
                         <StackPanel Margin="50 0 50 0" VerticalAlignment="Center">
                            <!--User name input field-->
                            <DockPanel LastChildFill="True" Margin="0 0 0 20">
-                              <materialDesign:PackIcon Grid.Column="0" Kind="Person"/>
+                              <materialDesign:PackIcon Grid.Column="0" Kind="Person" />
 
                               <TextBox Grid.Column="1" x:Name="txtFirstName" Margin="20 0 0 0"
                                        Foreground="#001e51" MaxLength="20" FontSize="20"
                                        materialDesign:HintAssist.Foreground="#007acc" materialDesign:TextFieldAssist.UnderlineBrush="#007acc"
-                                       Style="{StaticResource MaterialDesignFloatingHintTextBox}" >
+                                       Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Tên đăng nhập hoặc email" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Tên đăng nhập hoặc email" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                               </TextBox>
                            </DockPanel>
 
                            <!--Password input field-->
                            <DockPanel LastChildFill="True" Margin="0 20 0 20">
-                              <materialDesign:PackIcon Grid.Column="0"  Kind="Key"/>
+                              <materialDesign:PackIcon Grid.Column="0"  Kind="Key" />
 
                               <!--Password mật khẩu-->
                               <PasswordBox Grid.Column="1" x:Name="txtNewPassword" Margin="20 0 0 0"
                                            Foreground="#001e51" MaxLength="20" FontSize="20"
                                            materialDesign:HintAssist.Foreground="#007acc" materialDesign:TextFieldAssist.UnderlineBrush="#007acc"
-                                           Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" >
+                                           Style="{StaticResource MaterialDesignFloatingHintPasswordBox}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Mật khẩu" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                               </PasswordBox>
                            </DockPanel>
 
                            <!--Password input field-->
                            <DockPanel LastChildFill="True" Margin="0 20 0 20">
-                              <materialDesign:PackIcon Grid.Column="0"  Kind="Key"/>
+                              <materialDesign:PackIcon Grid.Column="0"  Kind="Key" />
 
                               <!--Password mật khẩu-->
                               <PasswordBox Grid.Column="1" x:Name="txtConfmPassword" Margin="20 0 0 0"
                                            Foreground="#001e51" MaxLength="20" FontSize="20"
                                            materialDesign:HintAssist.Foreground="#007acc" materialDesign:TextFieldAssist.UnderlineBrush="#007acc"
-                                           Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" >
+                                           Style="{StaticResource MaterialDesignFloatingHintPasswordBox}">
                                  <materialDesign:HintAssist.Hint>
-                                    <TextBlock Text="Xác nhận mật khẩu" Margin="0 -8 0 0" FontSize="20"/>
+                                    <TextBlock Text="Xác nhận mật khẩu" Margin="0 -8 0 0" FontSize="20" />
                                  </materialDesign:HintAssist.Hint>
                               </PasswordBox>
                            </DockPanel>
 
                            <!---->
-                           <TextBlock Visibility="Visible" Text="Tài khoản đã tồn tại !" Foreground="#FE5969" FontSize="16" Margin="50 10 0 0"/>
+                           <TextBlock Visibility="Visible" Text="Tài khoản đã tồn tại !" Foreground="#FE5969" FontSize="16" Margin="50 10 0 0" />
 
                            <Button ToolTip="Đăng ký" IsDefault="True" Margin="0 20 0 0" Height="50" Style="{StaticResource DarkBlueButton}"
                                    Command="{Binding SignUpCommand}" CommandParameter="{Binding ElementName=loginWindow}">
-                              <TextBlock Text="TẠO TÀI KHOẢN" FontSize="20"/>
+                              <TextBlock Text="TẠO TÀI KHOẢN" FontSize="20" />
                            </Button>
                         </StackPanel>
                      </Grid>

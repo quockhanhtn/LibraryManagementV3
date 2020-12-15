@@ -111,7 +111,7 @@ namespace LibraryManagement.CustomControl
          }
       }
 
-      public static MessageBoxResult Show(string messageText, string caption, MessageBoxButton buttons, MessageBoxImage icon, MessageBoxResult defaultResult)
+      public static MessageBoxResult Show(string messageText, string caption, MessageBoxButton buttons, MessageBoxImage icon, MessageBoxResult defaultResult = MessageBoxResult.OK)
       {
          CustomMessageBox customMessageBox = new CustomMessageBox();
          customMessageBox.titleBar.Tag = caption;

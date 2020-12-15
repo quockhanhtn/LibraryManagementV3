@@ -1,20 +1,13 @@
 ﻿using LibraryManagement.Utils;
+using System;
+using System.Data.Entity;
 using System.Linq;
 
 namespace LibraryManagement.Model
 {
-   public class UserDAL
+   public class UserDAL : IDataUpdate<User, long>, IUserLogin<User>
    {
-      /// <summary>
-      ///
-      /// </summary>
-      /// <param name="username"></param>
-      /// <param name="password"></param>
-      /// <returns>
-      /// <b>null</b> if login Failed <br/>
-      /// <b>User object</b> if login succesed
-      /// </returns>
-      public static User Login(string userInput, string passwordPlantext)
+      public User Login(string userInput, string passwordPlantext)
       {
          userInput = userInput.TrimCheck();
          passwordPlantext = passwordPlantext.TrimCheck();
@@ -34,21 +27,101 @@ namespace LibraryManagement.Model
          {
             return LoginWithUsername(userInput, passwordEncode);
          }
+
+         #region Inner method
+
+         User LoginWithEmail(string email, string pwEncode)
+         {
+            return EFProvider.Instance.DbEntities.Users.Where(a => a.Email == email && a.Password == pwEncode).FirstOrDefault();
+         }
+
+         User LoginWithUsername(string username, string pwEncode)
+         {
+            return EFProvider.Instance.DbEntities.Users.Where(a => a.Username == username && a.Password == pwEncode).FirstOrDefault();
+         }
+
+         User LoginWithPhoneNumber(string phoneNumber, string pwEncode)
+         {
+            return EFProvider.Instance.DbEntities.Users.Where(a => a.PhoneNumber == phoneNumber && a.Password == pwEncode).FirstOrDefault();
+         }
+
+         #endregion
       }
 
-      private static User LoginWithEmail(string email, string passwordEncode)
+      public bool ChangePassword(string username, string oldPassword, string newPassword)
       {
-         return EFProvider.Instance.DbEntities.Users.Where(a => a.Email == email && a.Password == passwordEncode).FirstOrDefault();
+         return false;
       }
 
-      private static User LoginWithUsername(string username, string passwordEncode)
+      public long Add(User newObject)
       {
-         return EFProvider.Instance.DbEntities.Users.Where(a => a.Username == username && a.Password == passwordEncode).FirstOrDefault();
+         try
+         {
+            newObject.UserStatus = true;
+            EFProvider.Instance.SaveEntity(newObject, EntityState.Added, true);
+            return newObject.UserId;
+         }
+         catch (Exception e)
+         {
+            _ = e.Message;
+            return 0;
+         }
       }
 
-      private static User LoginWithPhoneNumber(string phoneNumber, string passwordEncode)
+      public bool Update(User objectUpdate)
       {
-         return EFProvider.Instance.DbEntities.Users.Where(a => a.PhoneNumber == phoneNumber && a.Password == passwordEncode).FirstOrDefault();
+         var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectUpdate.UserId).SingleOrDefault();
+
+         if (user != null)
+         {
+            user.LastName = objectUpdate.LastName;
+            user.FirstName = objectUpdate.FirstName;
+            user.Gender = objectUpdate.Gender;
+            user.DateOfBirth = objectUpdate.DateOfBirth;
+            user.Ssn = objectUpdate.Ssn;
+
+            user.Address = objectUpdate.Address;
+            user.Email = objectUpdate.Email;
+            user.PhoneNumber = objectUpdate.PhoneNumber;
+
+            EFProvider.Instance.SaveEntity(user, EntityState.Modified);
+            return true;
+         }
+         else { return false; }
       }
+
+      public bool ChangeStatus(long objectId)
+      {
+         var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectId).SingleOrDefault();
+         if (user != null)
+         {
+            user.UserStatus = user.UserStatus != true;
+            EFProvider.Instance.SaveEntity(user, EntityState.Modified);
+            return true;
+         }
+         return false;
+      }
+
+      public bool Delete(long objectId) => false;
+
+      #region Singleton Declare
+
+      public static UserDAL Instance
+      {
+         get
+         {
+            instance = instance ?? new UserDAL();
+            return instance;
+         }
+         set { instance = value; }
+      }
+
+      private UserDAL()
+      {
+      }
+
+      private static UserDAL instance;
+
+      #endregion
    }
 }

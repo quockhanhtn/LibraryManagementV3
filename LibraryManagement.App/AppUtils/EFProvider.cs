@@ -1,8 +1,9 @@
-﻿using System.Data.Entity;
+﻿using LibraryManagement.Model;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
 using System.Windows;
 
-namespace LibraryManagement.Model
+namespace LibraryManagement
 {
    public class EFProvider
    {

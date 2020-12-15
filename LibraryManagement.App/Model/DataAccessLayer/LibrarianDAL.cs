@@ -7,34 +7,69 @@ using System.Linq;
 
 namespace LibraryManagement.Model
 {
-   public class LibrarianDAL : IDataAccessLayer<Librarian, long>
+   public class LibrarianDAL : IDataGet<Librarian, long>, IDataUpdate<Librarian, long>
    {
-      public object Add(Librarian newObject)
+      public long Add(Librarian newLibraian)
       {
-         var newLibraian = newObject as Librarian;
          try
          {
-            EFProvider.Instance.SaveEntity(newLibraian.User, EntityState.Added);
-            EFProvider.Instance.SaveEntity(newLibraian, EntityState.Added, true);
+            var newUserId = UserDAL.Instance.Add(newLibraian.User);
+            if (newUserId != 0)
+            {
+               newLibraian.UserId = newUserId;
+               newLibraian.User = EFProvider.Instance.DbEntities.Users.Where(u => u.UserId == newUserId).FirstOrDefault();
+               EFProvider.Instance.SaveEntity(newLibraian, EntityState.Added, true);
+               return newUserId;
+            }
+            else { return 0; }
          }
-         catch (Exception) { return null; }
-
-         return newLibraian.UserId;
+         catch (Exception e)
+         {
+            _ = e.Message;
+            return 0;
+         }
       }
 
-      public bool ChangeStatus(long objectId)
+      public bool Update(Librarian objectUpdate)
       {
-         throw new NotImplementedException();
+         if (UserDAL.Instance.Update(objectUpdate.User))
+         {
+            var librarian = GetById(objectUpdate.UserId);
+            if (librarian != null)
+            {
+               librarian.StartDate = objectUpdate.StartDate;
+               librarian.Salary = objectUpdate.Salary;
+               EFProvider.Instance.SaveEntity(librarian, EntityState.Modified);
+               return true;
+            }
+         }
+         return false;
       }
 
-      public bool Delete(long objectId)
-      {
-         throw new NotImplementedException();
-      }
+      public bool ChangeStatus(long objectId) => UserDAL.Instance.ChangeStatus(objectId);
+
+      public bool Delete(long objectId) => false;
 
       public ObservableCollection<Librarian> FindSimilar(string keyWord, EStatusFillter fillter = EStatusFillter.AllStatus)
       {
-         throw new NotImplementedException();
+         keyWord = keyWord.TrimCheck().RemoveUnicode().ToLower();
+
+         if (string.IsNullOrEmpty(keyWord))
+         {
+            return Gets(fillter);
+         }
+         else
+         {
+            if (char.IsDigit(keyWord, 0))
+            {
+               return Gets(fillter).Where(l => l.User.PhoneNumber.Contains(keyWord)).ToObservableCollection();
+            }
+            if (keyWord.Contains("@"))
+            {
+               return Gets(fillter).Where(l => l.User.Email.Like(keyWord)).ToObservableCollection();
+            }
+            return Gets(fillter).Where(x => x.User.FullName.Like(keyWord)).ToObservableCollection();
+         }
       }
 
       public ObservableCollection<Librarian> Gets(EStatusFillter fillter = EStatusFillter.AllStatus)
@@ -45,9 +80,11 @@ namespace LibraryManagement.Model
             case EStatusFillter.AllStatus:
                entities = EFProvider.Instance.DbEntities.Librarians.ToList();
                break;
+
             case EStatusFillter.Active:
                entities = EFProvider.Instance.DbEntities.Librarians.Where(x => x.User.UserStatus == true).ToList();
                break;
+
             case EStatusFillter.InActive:
                entities = EFProvider.Instance.DbEntities.Librarians.Where(x => x.User.UserStatus != true).ToList();
                break;
@@ -55,14 +92,9 @@ namespace LibraryManagement.Model
          return entities.ToObservableCollection();
       }
 
-      public bool Update(Librarian objectUpdate)
-      {
-         bool updateUserResult =  EFProvider.Instance.SaveEntity(objectUpdate.User, EntityState.Modified);
-         bool updateLibrarianResult =  EFProvider.Instance.SaveEntity(objectUpdate, EntityState.Modified);
+      public Librarian GetById(long id) => EFProvider.Instance.DbEntities.Librarians.Where(l => l.UserId == id).FirstOrDefault();
 
-         return updateUserResult && updateLibrarianResult;
-      }
-
+      #region Singleton Declare
       public static LibrarianDAL Instance
       {
          get
@@ -73,8 +105,11 @@ namespace LibraryManagement.Model
          set { instance = value; }
       }
 
-      private LibrarianDAL() { }
+      private LibrarianDAL()
+      {
+      }
 
       private static LibrarianDAL instance;
+      #endregion
    }
 }

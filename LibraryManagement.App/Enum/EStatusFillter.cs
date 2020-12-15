@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.Model
+﻿namespace LibraryManagement
 {
    /// <summary>
    /// Trạng thái của object khi lấy dữ liệu từ Database
@@ -9,10 +9,12 @@
       /// Tất cả trạng thái
       /// </summary>
       AllStatus,
+
       /// <summary>
       /// Chỉ những object có Status == true
       /// </summary>
       Active,
+
       /// <summary>
       /// Các object có Status != true
       /// </summary>

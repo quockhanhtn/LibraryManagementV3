@@ -1,5 +1,4 @@
 ﻿using LibraryManagement.Utils;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -7,7 +6,7 @@ using System.Linq;
 
 namespace LibraryManagement.Model
 {
-   public class BookCategoryDAL : IDataAccessLayer<BookCategory, long>
+   public class BookCategoryDAL : IDataGet<BookCategory, long>, IDataUpdate<BookCategory, long>
    {
       public ObservableCollection<BookCategory> Gets(EStatusFillter fillter = EStatusFillter.AllStatus)
       {
@@ -17,15 +16,19 @@ namespace LibraryManagement.Model
             case EStatusFillter.AllStatus:
                entities = EFProvider.Instance.DbEntities.BookCategories.ToList();
                break;
+
             case EStatusFillter.Active:
                entities = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus == true).ToList();
                break;
+
             case EStatusFillter.InActive:
                entities = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus == false).ToList();
                break;
          }
          return entities.ToObservableCollection();
       }
+
+      public BookCategory GetById(long id) => EFProvider.Instance.DbEntities.BookCategories.Where(bc => bc.BookCategoryId == id).FirstOrDefault();
 
       public ObservableCollection<BookCategory> FindSimilar(string keyWord, EStatusFillter fillter = EStatusFillter.AllStatus)
       {
@@ -37,11 +40,11 @@ namespace LibraryManagement.Model
          }
          else
          {
-            return Gets(fillter).Where(x => x.BookCategoryName.RemoveUnicode().ToLower().Contains(keyWord)).ToObservableCollection();
+            return Gets(fillter).Where(x => x.BookCategoryName.Like(keyWord)).ToObservableCollection();
          }
       }
 
-      public object Add(BookCategory newObject)
+      public long Add(BookCategory newObject)
       {
          EFProvider.Instance.SaveEntity(newObject, EntityState.Added, true);
          return newObject.BookCategoryId;
@@ -49,7 +52,7 @@ namespace LibraryManagement.Model
 
       public bool Update(BookCategory objectUpdate)
       {
-         var bookCategoryUpdate = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryId == objectUpdate.BookCategoryId).SingleOrDefault();
+         var bookCategoryUpdate = GetById(objectUpdate.BookCategoryId);
          if (bookCategoryUpdate != null)
          {
             bookCategoryUpdate.BookCategoryName = objectUpdate.BookCategoryName;
@@ -86,6 +89,7 @@ namespace LibraryManagement.Model
          else { return false; }
       }
 
+      #region Singleton Declare
       public static BookCategoryDAL Instance
       {
          get
@@ -96,8 +100,11 @@ namespace LibraryManagement.Model
          set { instance = value; }
       }
 
-      private BookCategoryDAL() { }
+      private BookCategoryDAL()
+      {
+      }
 
       private static BookCategoryDAL instance;
+      #endregion
    }
 }

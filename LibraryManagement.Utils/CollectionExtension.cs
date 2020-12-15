@@ -8,9 +8,12 @@ namespace LibraryManagement.Utils
       static public ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection)
       {
          var result = new ObservableCollection<T>();
-         foreach (var item in collection)
+         if (collection != null)
          {
-            result.Add(item);
+            foreach (var item in collection)
+            {
+               result.Add(item);
+            }
          }
          return result;
       }

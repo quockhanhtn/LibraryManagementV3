@@ -5,10 +5,11 @@
    <!-- Include font family-->
    <FontFamily x:Key="Roboto">/LibraryManagement.App;component/Resources/Fonts/Roboto#Roboto</FontFamily>
    <FontFamily x:Key="BigShouldersInlineText">/LibraryManagement.App;component/Resources/Fonts/BigShouldersInlineText/#Big Shoulders Inline Text</FontFamily>
-   
+
    <!-- Icon -->
    <BitmapImage x:Key="LibraryIcon">/LibraryManagement.App;component/Resources/Images/Icons/library-ico.ico</BitmapImage>
 
+   <BitmapImage x:Key="DefaultUserImage">/LibraryManagement.App;component/Resources/Images/default-avatar.jpg</BitmapImage>
 
    <!--Define value for page-->
    <Brush x:Key="PageBackgroundColor">#fafafa</Brush>
@@ -16,7 +17,8 @@
    <sys:Double x:Key="PageDesignHeight">734</sys:Double>
    <sys:Double x:Key="PageDesignWidth">1300</sys:Double>
 
+   <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
    <!-- ViewModel object -->
-   <viewmodel:LoginWindowViewModel x:Key="LoginWindowVM"/>
-   
+   <viewmodel:LoginWindowViewModel x:Key="LoginWindowVM" />
 </ResourceDictionary>

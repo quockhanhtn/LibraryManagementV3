@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS [dbo].[User]
 CREATE TABLE [dbo].[User](
 	[UserId] BIGINT IDENTITY(1, 1),
 	[FisrtName] NVARCHAR(10) NULL,
-	[LastName] NVARCHAR(30) NULL,
+	[LastName] NVARCHAR(40) NULL,
 	[Gender] NVARCHAR(10) NULL,
 	[DateOfBirth] DATE NULL,
 	[Ssn] VARCHAR(12) NULL,

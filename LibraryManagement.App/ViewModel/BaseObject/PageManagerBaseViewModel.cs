@@ -1,5 +1,4 @@
-﻿using LibraryManagement.Model;
-using LibraryManagement.Utils;
+﻿using LibraryManagement.Utils;
 using MaterialDesignThemes.Wpf;
 using OfficeOpenXml;
 using System;
@@ -8,26 +7,27 @@ using System.Windows.Input;
 
 namespace LibraryManagement.ViewModel
 {
-   public class BasePageManagerViewModel<T> : BaseViewModel
+   public class PageManagerBaseViewModel<T> : BaseViewModel
    {
       public ICommand SearchCommand { get; set; }
       public ICommand ExportToExcelCommand { get; set; }
       public ICommand AddCommand { get; set; }
       public ICommand UpdateCommand { get; set; }
-      public ICommand StatusChangeCommand { get; set; }
+      public ICommand StatusOnCommand { get; set; }
+      public ICommand StatusOffCommand { get; set; }
       public ICommand DeleteCommand { get; set; }
       public SnackbarMessageQueue SnackbarMessageQueue { get; set; }
 
       public ObservableCollection<T> ListDTO { get => listDTO; set { listDTO = value; OnPropertyChanged(nameof(ListDTO)); } }
-      public T DTOSelected { get => _DTOSelected; set { _DTOSelected = value; OnPropertyChanged(nameof(DTOSelected)); ObjectSelectedChange(); } }
+      public T DTOSelected { get => _DTOSelected; set { _DTOSelected = value; OnPropertyChanged(nameof(DTOSelected)); } }
 
-      protected BasePageManagerViewModel() { }
-
-      protected virtual void ObjectSelectedChange() { }
+      protected PageManagerBaseViewModel()
+      {
+      }
 
       protected void StyleExcelWorkSheet(ExcelWorksheet worksheet, string title, string[] columnHeaders, double[] columnWidths)
       {
-         worksheet.SetTitleAndDateTime(title, DateTime.Now, columnHeaders.Length);
+         worksheet.SetTitleAndDateTime(title.ToUpper(), DateTime.Now, columnHeaders.Length);
          worksheet.SetHeader(columnHeaders);
          worksheet.SetColumWidth(columnWidths);
       }
@@ -37,6 +37,14 @@ namespace LibraryManagement.ViewModel
          this.SnackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(durationSecond));
          this.SnackbarMessageQueue.Clear();
          this.SnackbarMessageQueue.Enqueue(message);
+         OnPropertyChanged(nameof(this.SnackbarMessageQueue));
+      }
+
+      protected void ShowSnackbarMessage(object message, object actionContent, Action actionHandler, double durationSecond = 5)
+      {
+         this.SnackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(durationSecond));
+         this.SnackbarMessageQueue.Clear();
+         this.SnackbarMessageQueue.Enqueue(message, actionContent, actionHandler);
          OnPropertyChanged(nameof(this.SnackbarMessageQueue));
       }
 

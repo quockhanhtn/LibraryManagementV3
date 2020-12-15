@@ -27,7 +27,7 @@ namespace LibraryManagement.Model
         public string Password { get; set; }
         public string UserType { get; set; }
         public bool UserStatus { get; set; }
-        public string ImagePath { get; set; }
+        public string Image { get; set; }
     
         public virtual Librarian Librarian { get; set; }
         public virtual Member Member { get; set; }

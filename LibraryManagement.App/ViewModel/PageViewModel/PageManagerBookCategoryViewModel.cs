@@ -1,10 +1,8 @@
 ﻿using LibraryManagement.CustomControl;
 using LibraryManagement.Model;
 using LibraryManagement.Utils;
-using MaterialDesignThemes.Wpf;
 using OfficeOpenXml;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +10,7 @@ using System.Windows.Input;
 
 namespace LibraryManagement.ViewModel
 {
-   public class PageManagerBookCategoryViewModel : BasePageManagerViewModel<BookCategory>
+   public class PageManagerBookCategoryViewModel : PageManagerBaseViewModel<BookCategory>
    {
       public ICommand ObjectSelectedChangedCommand { get; set; }
       public ICommand CopyIdCommand { get; set; }
@@ -28,27 +26,22 @@ namespace LibraryManagement.ViewModel
             Thread thread = new Thread(() =>
             {
                Application.Current.Dispatcher.Invoke(new Action(delegate () { ReloadList(); }));
-            });
-            thread.IsBackground = true;
+            })
+            {
+               IsBackground = true
+            };
             thread.Start();
             //ReloadList();
          }
       }
+
       public PageManagerBookCategoryViewModel()
       {
          ReloadList();
 
          SearchCommand = new RelayCommand<TextBox>((p) => { return p != null; }, (p) =>
          {
-            if (p.Text == "" || p.Text == " ")
-            {
-               p.Text = "";
-               ReloadList();
-            }
-            else
-            {
-               ListDTO = BookCategoryDAL.Instance.Gets().Where(x => x.BookCategoryName.Like(p.Text)).ToObservableCollection();
-            }
+            ListDTO = BookCategoryDAL.Instance.FindSimilar(p.Text, IsShowHiddenCategory ? EStatusFillter.AllStatus : EStatusFillter.Active);
          });
 
          ObjectSelectedChangedCommand = new RelayCommand<UserControl>((p) => { return p != null && DTOSelected != null; }, (p) =>
@@ -160,11 +153,11 @@ namespace LibraryManagement.ViewModel
             //ReloadList();
          });
 
-         StatusChangeCommand = new RelayCommand<object>((p) => { return DTOSelected != null; }, (p) =>
-         {
-            BookCategoryDAL.Instance.ChangeStatus(DTOSelected.BookCategoryId);
-            ReloadList();
-         });
+         //StatusChangeCommand = new RelayCommand<object>((p) => { return DTOSelected != null; }, (p) =>
+         //{
+         //   BookCategoryDAL.Instance.ChangeStatus(DTOSelected.BookCategoryId);
+         //   ReloadList();
+         //});
 
          DeleteCommand = new RelayCommand<object>((p) => { return DTOSelected != null && DTOSelected.NumberOfBook == 0; }, (p) =>
          {

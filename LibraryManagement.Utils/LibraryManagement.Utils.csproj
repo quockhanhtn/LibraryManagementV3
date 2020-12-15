@@ -57,7 +57,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base64Utils.cs" />
+    <Compile Include="BitmapExtension.cs" />
     <Compile Include="CollectionExtension.cs" />
+    <Compile Include="DataTypeConvertExtension.cs" />
     <Compile Include="DialogUtils.cs" />
     <Compile Include="ExcelHelper.cs" />
     <Compile Include="ExcelWorksheetExtension.cs" />

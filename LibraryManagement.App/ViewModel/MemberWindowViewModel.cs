@@ -55,6 +55,17 @@ namespace LibraryManagement.ViewModel
                   break;
 
                case "mnuLogout":
+                  var messageResult = CustomControl.CustomMessageBox.Show("Bạn có thực sự muốn đăng xuất ?", "Cảnh báo", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                  if (messageResult == MessageBoxResult.Yes)
+                  {
+                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                     Application.Current.Shutdown();
+                  }
+                  else
+                  {
+                     lvNavigationMenu.SelectedIndex = 0;
+                     NavSelectionChangedCommand.Execute(p);
+                  }
                   break;
             }
          });

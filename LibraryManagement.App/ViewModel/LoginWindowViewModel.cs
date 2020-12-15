@@ -1,4 +1,5 @@
-﻿using LibraryManagement.Model;
+﻿using LibraryManagement.CustomControl;
+using LibraryManagement.Model;
 using LibraryManagement.View;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace LibraryManagement.ViewModel
       public ICommand ShowPasswordCommand { get; set; }
 
       #region Binding Property
+
       public string LoginUsername
       {
          get => loginUsername;
@@ -66,7 +68,8 @@ namespace LibraryManagement.ViewModel
             OnPropertyChanged(nameof(LoginFailedVisibility));
          }
       }
-      #endregion
+
+      #endregion Binding Property
 
       public LoginWindowViewModel()
       {
@@ -88,9 +91,14 @@ namespace LibraryManagement.ViewModel
             }
          });
 
-         LoginCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
+         LoginCommand = new RelayCommand<Window>((p) => { return p != null; }, (p) =>
          {
-            User userLogin = UserDAL.Login(LoginUsername, LoginPassword);
+            User userLogin = null;
+
+            WaitingDialog.Show(() =>
+            {
+               userLogin = UserDAL.Instance.Login(LoginUsername, LoginPassword);
+            });
 
             if (userLogin == null)  // login failed
             {
@@ -99,7 +107,7 @@ namespace LibraryManagement.ViewModel
             else                    // login susseced
             {
                LoginFailedVisibility = Visibility.Collapsed;
-
+               p.Hide();
                switch (userLogin.UserType)
                {
                   case string w when w == Definition.User.Type.Admin:
@@ -126,17 +134,20 @@ namespace LibraryManagement.ViewModel
                      memberWindow.Show();
                      break;
                }
+               p.Close();
             }
          });
 
          SignUpCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
-            
          });
 
          LostPasswordCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
          });
+
+         LoginUsername = "admin";
+         LoginPassword = "12";
       }
 
       private string loginUsername;

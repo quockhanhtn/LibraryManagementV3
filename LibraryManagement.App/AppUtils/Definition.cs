@@ -1,4 +1,4 @@
-﻿namespace LibraryManagement.Model
+﻿namespace LibraryManagement
 {
    public static class Definition
    {
@@ -23,8 +23,6 @@
             public static string Member = "MEMBER";
             public static string UnVerified = "UN_VERIFIED";
          }
-
-         
       }
    }
 }

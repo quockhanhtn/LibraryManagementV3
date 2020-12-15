@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,15 +8,8 @@ namespace LibraryManagement.Utils
 {
    public static class StringExtension
    {
-      public static string Base64Decode(this string strBase64EncodedData)
-      {
-         return Encoding.UTF8.GetString(Convert.FromBase64String(strBase64EncodedData));
-      }
-
-      public static string Base64Encode(this string plainText)
-      {
-         return Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
-      }
+      public static string Base64Decode(this string base64Text) => Base64Utils.Decode.ToString(base64Text);
+      public static string Base64Encode(this string plainText) => Base64Utils.Encode.FromString(plainText);
 
       /// <summary>
       /// Mã hóa chuỗi theo MD5
@@ -66,8 +60,12 @@ namespace LibraryManagement.Utils
       /// <returns></returns>
       public static bool Like(this string str, string searchKeyWord)
       {
-         searchKeyWord = searchKeyWord.RemoveUnicode().ToLower();
-         return str.RemoveUnicode().ToLower().Contains(searchKeyWord);
+         if (string.IsNullOrEmpty(str)) { return false; }
+         else
+         {
+            searchKeyWord = searchKeyWord.RemoveUnicode().ToLower();
+            return str.RemoveUnicode().ToLower().Contains(searchKeyWord);
+         }
       }
 
       public static string RemoveMutilSpace(this string str)
@@ -75,6 +73,50 @@ namespace LibraryManagement.Utils
          if (string.IsNullOrEmpty(str)) { return ""; }
          while (str.IndexOf("  ") >= 0) { str = str.Replace("  ", " "); }
          return str.TrimCheck();
+      }
+
+      public static string CapitalizeEachWord(this string str)
+      {
+         str = str.RemoveMutilSpace();
+         if (string.IsNullOrEmpty(str)) { return ""; }
+
+         var words = str.Split(' ').ToList();
+         for (int i = words.Count - 1; i >= 0; i--)
+         {
+            if (string.IsNullOrEmpty(words[i])) { words.RemoveAt(i); }
+            if (words[i].Length > 1)
+            {
+               words[i] = words[i].Substring(0, 1).ToUpper() + words[i].Substring(1).ToLower();
+            }
+         }
+
+         return string.Join(" ", words);
+      }
+
+      public static string RemoveNonDigit(this string str)
+      {
+         if (string.IsNullOrEmpty(str)) { return ""; }
+         else
+         {
+            for (int i = str.Length - 1; i >= 0; i--)
+            {
+               if (!char.IsDigit(str, i)) { str = str.Remove(i, 1); }
+            }
+            return str;
+         }
+      }
+
+      public static string RemoveNonLetter(this string str)
+      {
+         if (string.IsNullOrEmpty(str)) { return ""; }
+         else
+         {
+            for (int i = str.Length - 1; i >= 0; i--)
+            {
+               if (!(char.IsLetter(str, i) || char.IsWhiteSpace(str, i))) { str = str.Remove(i, 1); }
+            }
+            return str;
+         }
       }
    }
 }

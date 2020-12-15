@@ -21,8 +21,7 @@ namespace LibraryManagement.CustomControl
 
       private void DragMoveGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
       {
-         var window = this.GetRootParent() as System.Windows.Window;
-         if (window != null)
+         if (this.GetRootParent() is System.Windows.Window window)
          {
             try { window.DragMove(); }
             catch (Exception) { }

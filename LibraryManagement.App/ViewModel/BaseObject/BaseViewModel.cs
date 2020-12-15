@@ -11,6 +11,7 @@ namespace LibraryManagement.ViewModel
    public class BaseViewModel : INotifyPropertyChanged
    {
       public event PropertyChangedEventHandler PropertyChanged;
+
       protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
       {
          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -24,14 +25,13 @@ namespace LibraryManagement.ViewModel
 
       public RelayCommand(Predicate<T> canExecute, Action<T> execute)
       {
-         if (execute == null) { throw new ArgumentNullException("execute"); }
          _canExecute = canExecute;
-         _execute = execute;
+         _execute = execute ?? throw new ArgumentNullException("execute");
       }
 
       public bool CanExecute(object parameter)
       {
-         try { return _canExecute == null ? true : _canExecute((T)parameter); }
+         try { return _canExecute == null || _canExecute((T)parameter); }
          catch { return true; }
       }
 

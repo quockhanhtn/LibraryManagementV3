@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:LibraryManagement.View.Page" mc:Ignorable="d"
 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
@@ -13,6 +14,482 @@
              d:DesignHeight="{StaticResource PageDesignHeight}" d:DesignWidth="{StaticResource PageDesignWidth}"
              Background="{StaticResource PageBackgroundColor}" Foreground="{StaticResource PageForegroundColor}">
    <Grid>
-      <TextBlock Foreground="Black" Text="{Binding Name, ElementName=pageManagerMember}" FontSize="20" />
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition />
+         <ColumnDefinition Width="auto" />
+      </Grid.ColumnDefinitions>
+
+      <!-- List Độc giả-->
+      <materialDesign:Card Grid.Column="0" Style="{StaticResource MaterialDesignPageCard}" Margin="5 5 5 5">
+         <Grid>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="auto" />
+               <RowDefinition Height="auto" />
+               <RowDefinition Height="auto" />
+               <RowDefinition />
+               <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <!-- DANH SÁCH ĐỘC GIẢ-->
+            <TextBlock Grid.Row="0" Text="DANH SÁCH ĐỘC GIẢ" Style="{StaticResource TitleTextBlock}" />
+
+            <!-- Search and filter -->
+            <Grid Grid.Row="1" Margin="10 0 10 20">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="150" />
+                  <ColumnDefinition Width="auto" />
+               </Grid.ColumnDefinitions>
+
+               <!--Search-->
+               <TextBox x:Name="txtSearch" Style="{StaticResource MyTextBox}" Grid.Column="0" Margin="10 0"
+                        materialDesign:HintAssist.Hint="Tìm kiếm Độc giả theo họ tên, email hoặc số điện thoại">
+                  <i:Interaction.Triggers>
+                     <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtSearch}" />
+                     </i:EventTrigger>
+                  </i:Interaction.Triggers>
+               </TextBox>
+
+               <!-- Filter-->
+               <ComboBox Grid.Column="1" x:Name="cmbStatusFillter" materialDesign:HintAssist.Hint="Trạng thái"
+                         Margin="10 21 10 8" FontSize="16" materialDesign:HintAssist.HintOpacity=".26"
+                         SelectedIndex="{Binding StatusFillter, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                  <ComboBoxItem>Tất cả</ComboBoxItem>
+                  <ComboBoxItem>Còn sử dụng</ComboBoxItem>
+                  <ComboBoxItem>Bị khóa</ComboBoxItem>
+               </ComboBox>
+
+               <ToggleButton Margin="10" x:Name="chkViewDetailInfo" Grid.Column="2" Style="{StaticResource MaterialDesignActionToggleButton}"
+                             ToolTip="Xem thông tin chi tiết" IsChecked="False">
+                  <ToggleButton.Content>
+                     <materialDesign:PackIcon Foreground="White" Kind="ArrowLeft" />
+                  </ToggleButton.Content>
+                  <materialDesign:ToggleButtonAssist.OnContent>
+                     <materialDesign:PackIcon Foreground="White" Kind="ArrowRight" />
+                  </materialDesign:ToggleButtonAssist.OnContent>
+               </ToggleButton>
+            </Grid>
+
+            <!-- List thủ thư-->
+            <Grid Grid.Row="3" Margin="10 10">
+               <cc:MouseWheelScrollViewer ScrollViewer.CanContentScroll="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                  <DataGrid Style="{StaticResource MyDataGrid}" materialDesign:DataGridAssist.CellPadding="8" materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                            SelectedItem="{Binding DTOSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                            ItemsSource="{Binding ListDTO, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+
+                     <!--Right click menu-->
+                     <DataGrid.ContextMenu>
+                        <ContextMenu>
+                           <MenuItem Header="Sao chép Mã số" Command="{Binding CopyIdCommand}" />
+                           <MenuItem Header="Sao chép Họ và tên" Command="{Binding CopyNameCommand}" />
+                           <MenuItem Header="Sao chép Địa chỉ" Command="{Binding CopyAddressCommand}" />
+                           <MenuItem Header="Gửi mail" Command="{Binding SendEmailCommand}" />
+                           <Separator />
+                           <MenuItem Header="Khóa" Command="{Binding StatusOffCommand}" />
+                           <MenuItem Header="Mở khóa" Command="{Binding StatusOnCommand}" />
+                        </ContextMenu>
+                     </DataGrid.ContextMenu>
+
+                     <!--Custom Columns-->
+                     <DataGrid.Columns>
+                        <!--Mã số-->
+                        <DataGridTextColumn Binding="{Binding UserId}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock Text="Mã số" TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                                          </TextBlock>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!--Họ và tên đệm-->
+                        <DataGridTextColumn Binding="{Binding User.LastName}" Header="Họ và tên đệm" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Tên-->
+                        <DataGridTextColumn Binding="{Binding User.FirstName}" Header="Tên" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Giới tính-->
+                        <materialDesign:DataGridTextColumn Binding="{Binding User.GenderDisplay}" Header="Giới tính" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock TextWrapping="Wrap" Text="{Binding}" TextAlignment="Center" IsHitTestVisible="False">
+                                          </TextBlock>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+
+                        <!--Ngày sinh-->
+                        <materialDesign:DataGridTextColumn Binding="{Binding User.DateOfBirth, StringFormat='dd/MM/yyyy'}" Header="Ngày sinh" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock TextWrapping="Wrap" Text="{Binding}" TextAlignment="Center" IsHitTestVisible="False">
+                                          </TextBlock>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+
+                        <!--Căn cước công dân-->
+                        <DataGridTextColumn Binding="{Binding User.Ssn}" Header="CCCD" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Địa chỉ-->
+                        <DataGridTextColumn Binding="{Binding User.Address}" Header="Địa chỉ" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Số điện thoại-->
+                        <DataGridTextColumn Binding="{Binding User.PhoneNumber}" Header="Số diện thoại" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Email-->
+                        <DataGridTextColumn Binding="{Binding User.Email}" Header="Email" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                        <!--Ngày đăng ký-->
+                        <materialDesign:DataGridTextColumn Binding="{Binding RegisterDate, StringFormat='dd/MM/yyyy'}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                                             <Run Text="Ngày" />
+                                             <LineBreak />
+                                             <Run Text="đăng ký" />
+                                          </TextBlock>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+
+                        <!--Ngày hết hạn-->
+                        <materialDesign:DataGridTextColumn Binding="{Binding ExpDate, StringFormat='dd/MM/yyyy'}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                                             <Run Text="Ngày" />
+                                             <LineBreak />
+                                             <Run Text="hết hạn" />
+                                          </TextBlock>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+
+                        <!--Trạng thái-->
+                        <materialDesign:DataGridTextColumn Binding="{Binding StatusDisplay}" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                           <DataGridTextColumn.HeaderStyle>
+                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                                 <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                       <DataTemplate>
+                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False" Text="Trạng thái"/>
+                                       </DataTemplate>
+                                    </Setter.Value>
+                                 </Setter>
+                              </Style>
+                           </DataGridTextColumn.HeaderStyle>
+                           <DataGridTextColumn.ElementStyle>
+                              <Style TargetType="{x:Type TextBlock}">
+                                 <Setter Property="HorizontalAlignment" Value="Center" />
+                              </Style>
+                           </DataGridTextColumn.ElementStyle>
+                        </materialDesign:DataGridTextColumn>
+                     </DataGrid.Columns>
+                  </DataGrid>
+               </cc:MouseWheelScrollViewer>
+
+               <materialDesign:Snackbar MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" VerticalAlignment="Bottom" />
+            </Grid>
+
+            <!--Button-->
+            <StackPanel Grid.Row="4" HorizontalAlignment="Right" Margin="10 0" Orientation="Horizontal">
+               <StackPanel.Resources>
+                  <Style TargetType="Grid">
+                     <Setter Property="Width" Value="140" />
+                     <Setter Property="Margin" Value="0 2 0 0" />
+                  </Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                     <Setter Property="Width" Value="180" />
+                     <Setter Property="Margin" Value="5" />
+                  </Style>
+                  <Style TargetType="TextBlock">
+                     <Setter Property="VerticalAlignment" Value="Center" />
+                     <Setter Property="HorizontalAlignment" Value="Right" />
+                  </Style>
+                  <Style TargetType="materialDesign:PackIcon">
+                     <Setter Property="Width" Value="25" />
+                     <Setter Property="Height" Value="25" />
+                  </Style>
+               </StackPanel.Resources>
+
+               <!--Btn Export Excell-->
+               <Button Command="{Binding ExportToExcelCommand}" ToolTip="Xuất danh sách độc giả ra file Excel">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="FileExcel" />
+                     <TextBlock Text="XUẤT FILE EXCEL" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+
+               <!--Button Add-->
+               <Button Command="{Binding AddCommand}" ToolTip="Thêm độc giả mới">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="AccountAdd" />
+                     <TextBlock Text="THÊM ĐỘC GIẢ" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+
+               <!--Button Update-->
+               <Button Command="{Binding UpdateCommand}" ToolTip="Chỉnh sửa thông tin độc giả">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Edit" />
+                     <TextBlock Text="SỬA THÔNG TIN" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+            </StackPanel>
+         </Grid>
+      </materialDesign:Card>
+
+      <!---Thông tin Thủ thư-->
+      <GroupBox Style="{DynamicResource MaterialDesignCardGroupBox}" Grid.Column="1" Margin="0 5 5 5" Padding="10 10 10 0" Width="400" 
+                Visibility="{Binding ElementName=chkViewDetailInfo, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+         <GroupBox.Header>
+            <TextBlock Margin="8 -3 10 3" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+               <Run Text="Độc giả #"/>
+               <Run FontWeight="SemiBold" Text="{Binding DTOSelected.UserId, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+            </TextBlock>
+         </GroupBox.Header>
+         <GroupBox.Content>
+            <Grid>
+               <Grid.RowDefinitions>
+                  <RowDefinition/>
+                  <RowDefinition Height="50"/>
+               </Grid.RowDefinitions>
+
+               <!---Thông tin Thủ thư-->
+               <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Center">
+                  <StackPanel>
+                     <StackPanel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}" >
+                           <Setter Property="Margin" Value="10 10" />
+                        </Style>
+                        <Style TargetType="cc:DigitTextBox" BasedOn="{StaticResource MyTextBox}" >
+                           <Setter Property="Margin" Value="10 10" />
+                        </Style>
+                     </StackPanel.Resources>
+
+                     <!--Ảnh-->
+                     <Ellipse Margin="0 0 10 10" HorizontalAlignment="Center" Height="180" Width="180" Stroke="#007acc" StrokeThickness="2">
+                        <Ellipse.Fill>
+                           <ImageBrush ImageSource="{Binding Path=DTOSelected.User.ImageDisplay}" Stretch="UniformToFill"/>
+                        </Ellipse.Fill>
+                     </Ellipse>
+
+                     <!--Họ và tên-->
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <!---Họ-->
+                        <TextBox Grid.Column="0" materialDesign:HintAssist.Hint="Họ và tên đệm" MaxLength="40" Margin="10 10 5 10">
+                           <TextBox.Text>
+                              <Binding Path="DTOSelected.User.LastName" UpdateSourceTrigger="PropertyChanged" Mode="OneWay" NotifyOnSourceUpdated="True"/>
+                           </TextBox.Text>
+                        </TextBox>
+
+                        <!--Tên-->
+                        <TextBox Grid.Column="1" materialDesign:HintAssist.Hint="Tên" MaxLength="10" Margin="5 10 10 10">
+                           <TextBox.Text>
+                              <Binding Path="DTOSelected.User.FirstName" UpdateSourceTrigger="PropertyChanged" Mode="OneWay" NotifyOnSourceUpdated="True"/>
+                           </TextBox.Text>
+                        </TextBox>
+                     </Grid>
+
+                     <!--Giới tính và ngày sinh-->
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <!---Giới tính-->
+                        <ComboBox Grid.Column="0" materialDesign:HintAssist.Hint="Giới tính" Style="{StaticResource MyComboBox}" Margin="10 14 5 10"
+                                  SelectedItem="{Binding Path=DTOSelected.User.GenderDisplay, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                           <ComboBox.ItemsSource>
+                              <x:Array Type="sys:String">
+                                 <sys:String>Nam</sys:String>
+                                 <sys:String>Nữ</sys:String>
+                                 <sys:String>Khác</sys:String>
+                              </x:Array>
+                           </ComboBox.ItemsSource>
+                        </ComboBox>
+
+                        <!---Ngày sinh-->
+                        <DatePicker Grid.Column="1" materialDesign:HintAssist.Hint="Ngày sinh" Style="{StaticResource MyDatePicker}" Margin="5 10 10 10"
+                                    SelectedDate="{Binding Path=DTOSelected.User.DateOfBirth, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                        </DatePicker>
+                     </Grid>
+
+                     <!--Địa chỉ-->
+                     <TextBox materialDesign:HintAssist.Hint="Địa chỉ" MaxLength="100"
+                              Text="{Binding Path=DTOSelected.User.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                     </TextBox>
+
+                     <!---Email-->
+                     <TextBox materialDesign:HintAssist.Hint="Email" MaxLength="50"
+                              Text="{Binding Path=DTOSelected.User.Email, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                     </TextBox>
+
+                     <!--Sđt và CCCD-->
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <!---Số điện thoại-->
+                        <cc:DigitTextBox Grid.Column="0" materialDesign:HintAssist.Hint="Điện thoại" MaxLength="10" Margin="10 10 5 10"
+                                         Text="{Binding Path=DTOSelected.User.PhoneNumber, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                        </cc:DigitTextBox>
+
+                        <!--Căn cước công dân-->
+                        <cc:DigitTextBox Grid.Column="1" materialDesign:HintAssist.Hint="Căn cước công dân" x:Name="txtSSN" MaxLength="12" Margin="5 10 10 10"
+                                         Text="{Binding Path=DTOSelected.User.Ssn, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                        </cc:DigitTextBox>
+                     </Grid>
+
+                     <!--Lương và ngày bắt đầu-->
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <!---Ngày hết hạn-->
+                        <DatePicker Grid.Column="0" materialDesign:HintAssist.Hint="Ngày đăng ký" Style="{StaticResource MyDatePicker}" Margin="10 10 5 10"
+                                    SelectedDate="{Binding Path=DTOSelected.RegisterDate, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                        </DatePicker>
+
+                        <!---Ngày hết hạn-->
+                        <DatePicker Grid.Column="1" materialDesign:HintAssist.Hint="Ngày hết hạn" Style="{StaticResource MyDatePicker}" Margin="5 10 10 10"
+                                    SelectedDate="{Binding Path=DTOSelected.ExpDate, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                        </DatePicker>
+                     </Grid>
+                  </StackPanel>
+               </ScrollViewer>
+
+               <!--Button-->
+               <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+                  <StackPanel.Resources>
+                     <Style TargetType="Grid">
+                        <Setter Property="Width" Value="140" />
+                     </Style>
+                     <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                        <Setter Property="Width" Value="170" />
+                        <Setter Property="Margin" Value="5" />
+                     </Style>
+                     <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                     </Style>
+                     <Style TargetType="materialDesign:PackIcon">
+                        <Setter Property="Width" Value="25" />
+                        <Setter Property="Height" Value="25" />
+                     </Style>
+                  </StackPanel.Resources>
+
+                  <!--Button Status Off-->
+                  <Button Command="{Binding StatusOffCommand}" ToolTip="Thôi việc thủ thư">
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0" Kind="UserOff" />
+                        <TextBlock Text="KHÓA" Grid.Column="1"></TextBlock>
+                     </Grid>
+                  </Button>
+
+                  <!--Button Status On-->
+                  <Button Command="{Binding StatusOnCommand}" ToolTip="Làm việc lại">
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0" Kind="Update" />
+                        <TextBlock Text="MỞ KHÓA" Grid.Column="1"></TextBlock>
+                     </Grid>
+                  </Button>
+               </StackPanel>
+            </Grid>
+         </GroupBox.Content>
+      </GroupBox>
    </Grid>
 </UserControl>

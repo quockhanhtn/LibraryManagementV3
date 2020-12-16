@@ -6,11 +6,12 @@ using System.Windows;
 
 namespace LibraryManagement.ViewModel
 {
-   public class EditLibrarianWindowViewModel : EditWindowBaseViewModel<Librarian>
+   public class EditMemberWindowViewModel : EditWindowBaseViewModel<Member>
    {
       public string DisplayId { get => EditObject.UserId > 0 ? EditObject.UserId.ToString() : "Auto generate"; }
 
       #region Error text
+
       public string ErrorLastName { get => errorLastName; set { errorLastName = value; OnPropertyChanged(); } }
       public string ErrorFirstName { get => errorFirstName; set { errorFirstName = value; OnPropertyChanged(); } }
       public string ErrorGender { get => errorGender; set { errorGender = value; OnPropertyChanged(); } }
@@ -19,21 +20,16 @@ namespace LibraryManagement.ViewModel
       public string ErrorAddress { get => errorAddress; set { errorAddress = value; OnPropertyChanged(); } }
       public string ErrorPhoneNumber { get => errorPhoneNumber; set { errorPhoneNumber = value; OnPropertyChanged(); } }
       public string ErrorEmail { get => errorEmail; set { errorEmail = value; OnPropertyChanged(); } }
-      public string ErrorStartDate { get => errorStartDate; set { errorStartDate = value; OnPropertyChanged(); } }
-      public string ErrorSalary { get => errorSalary; set { errorSalary = value; OnPropertyChanged(); } }
+      public string ErrorRegisterDate { get => errorRegisterDate; set { errorRegisterDate = value; OnPropertyChanged(); } }
+      public string ErrorExpDate { get => errorExpDate; set { errorExpDate = value; OnPropertyChanged(); } }
 
       #endregion Error text
 
-      public EditLibrarianWindowViewModel(Librarian editLibrarian = null) : base(editLibrarian)
+      public EditMemberWindowViewModel(Member editMember = null) : base(editMember)
       {
-         //RetypeCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
-         //{
-         //   if (Mode == EditMode.Add) { Load(null); }
-         //   else { EditObject = LibrarianDAL.Instance.GetById(EditObject.UserId); }
-         //});
       }
 
-      bool CheckInput()
+      private bool CheckInput()
       {
          bool missingInput = false;
 
@@ -73,27 +69,28 @@ namespace LibraryManagement.ViewModel
          return !missingInput;
       }
 
-      protected override void Load(Librarian editObject)
+      protected override void Load(Member editObject)
       {
          if (editObject != null)
          {
             Mode = EditMode.Update;
             EditObject = editObject;
-            EditTitleText = "CHỈNH SỬA THÔNG TIN THỦ THƯ";
+            EditTitleText = "CHỈNH SỬA THÔNG TIN ĐỘC GIẢ";
          }
          else
          {
             Mode = EditMode.Add;
-            EditObject = new Librarian()
+            EditObject = new Member()
             {
                User = new User()
                {
-                  UserType = Definition.User.Type.Librarian,
+                  UserType = Definition.User.Type.Member,
                   DateOfBirth = DateTime.Today.AddDays(-365 * 18),
                },
-               StartDate = DateTime.Today
+               RegisterDate = DateTime.Today,
+               ExpDate = DateTime.Today.AddDays(30),
             };
-            EditTitleText = "THÊM THỦ THƯ MỚI";
+            EditTitleText = "THÊM ĐỘC GIẢ MỚI";
          }
          OnPropertyChanged();
       }
@@ -107,22 +104,23 @@ namespace LibraryManagement.ViewModel
             EditObject.User.Username = EditObject.User.PhoneNumber;
             EditObject.User.Password = EditObject.User.PhoneNumber.Base64Encode().ToMD5Hash();
 
-            if (LibrarianDAL.Instance.Add(EditObject) != 0)
+            if (MemberDAL.Instance.Add(EditObject) != 0)
             {
                EditResult = true;
                p.Close();
             }
-            else { CustomMessageBox.Show("Thêm thủ thư thất bại", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error); }
+            else { CustomMessageBox.Show("Thêm độc giả thất bại", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error); }
          }
          else
          {
-            if (LibrarianDAL.Instance.Update(EditObject))
+            if (MemberDAL.Instance.Update(EditObject))
             {
                EditResult = true;
                p.Close();
             }
             else { CustomMessageBox.Show("Cập nhật thông tin thất bại", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error); }
          }
+
       }
 
       #region field
@@ -134,8 +132,8 @@ namespace LibraryManagement.ViewModel
       private string errorAddress;
       private string errorPhoneNumber;
       private string errorEmail;
-      private string errorStartDate;
-      private string errorSalary;
+      private string errorRegisterDate;
+      private string errorExpDate;
       #endregion
    }
 }

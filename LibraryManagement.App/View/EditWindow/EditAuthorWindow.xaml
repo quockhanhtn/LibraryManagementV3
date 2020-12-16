@@ -1,0 +1,109 @@
+﻿<Window x:Class="LibraryManagement.View.EditWindow.EditAuthorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LibraryManagement.View.EditWindow" mc:Ignorable="d"
+        
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
+        
+        Title="Library Management" Icon="{StaticResource LibraryIcon}" x:Name="editAuthorWindow" 
+        Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen" 
+        Height="300" Width="400">
+
+   <Border Style="{StaticResource WindowBoder}" BorderBrush="#007acc">
+      <Grid>
+         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+         </Grid.RowDefinitions>
+
+         <!--Title bar-->
+         <cc:TitleBar x:Name="titleBar" Grid.Row="0" Grid.ColumnSpan="2"
+                      MaximinButtonVisibility="Collapsed" MinimizeButtonVisibility="Collapsed" Foreground="White"
+                      Tag="{Binding ElementName=editAuthorWindow, Path=Title, UpdateSourceTrigger=PropertyChanged}"
+                      FontSize="16" Height="24" Background="#007acc">
+         </cc:TitleBar>
+
+         <!---Tiêu đề-->
+         <TextBlock Grid.Row="1" Text="{Binding EditTitleText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Style="{StaticResource TitleTextBlock}" />
+
+         <!---Thông tin-->
+         <ScrollViewer VerticalAlignment="Center" Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+               <StackPanel.Resources>
+                  <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}"/>
+                  <Style TargetType="cc:DigitTextBox" BasedOn="{StaticResource MyTextBox}"/>
+                  <Style TargetType="TextBlock" BasedOn="{StaticResource WarningTextBlock}"/>
+               </StackPanel.Resources>
+
+               <!---TÊn chuyên mục-->
+               <TextBox materialDesign:HintAssist.Hint="Tên chuyên mục" x:Name="txtName" MaxLength="50"
+                        Text="{Binding EditObject.NickName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+               <TextBlock Text="{Binding Path=ErrorBookCategoryName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+
+               <!---Tên-->
+               <cc:DigitTextBox materialDesign:HintAssist.Hint="Số ngày cho mượn" MaxLength="3"
+                                Text="{Binding EditObject.LimitDays, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+               </cc:DigitTextBox>
+               <TextBlock Text="{Binding Path=ErrorLimitDays, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </StackPanel>
+         </ScrollViewer>
+
+         <Grid Grid.Row="3" Margin="10 0" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="Auto">
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition />
+               <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+               <Style TargetType="Grid">
+                  <Setter Property="Width" Value="110" />
+               </Style>
+               <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                  <Setter Property="Width" Value="auto" />
+                  <Setter Property="Margin" Value="5" />
+               </Style>
+               <Style TargetType="TextBlock">
+                  <Setter Property="VerticalAlignment" Value="Center" />
+                  <Setter Property="HorizontalAlignment" Value="Right" />
+               </Style>
+               <Style TargetType="materialDesign:PackIcon">
+                  <Setter Property="Width" Value="25" />
+                  <Setter Property="Height" Value="25" />
+               </Style>
+            </Grid.Resources>
+
+            <!--Button Save-->
+            <Button Grid.Column="0" IsDefault="True" ToolTip="Lưu"
+                    Command="{Binding SaveChangeCommand}" CommandParameter="{Binding ElementName=editAuthorWindow}">
+               <Grid>
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="auto" />
+                     <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <materialDesign:PackIcon Grid.Column="0" Kind="ContentSave" />
+                  <TextBlock Text="LƯU" Grid.Column="1"></TextBlock>
+               </Grid>
+            </Button>
+            <!--Button Cancel-->
+            <Button Grid.Column="1" IsCancel="True" ToolTip="Hủy"
+                    Command="{Binding CanncelCommand}" CommandParameter="{Binding ElementName=editAuthorWindow}">
+               <Grid>
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="auto" />
+                     <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <materialDesign:PackIcon Grid.Column="0" Kind="Cancel" />
+                  <TextBlock Text="HỦY" Grid.Column="1"></TextBlock>
+               </Grid>
+            </Button>
+         </Grid>
+      </Grid>
+   </Border>
+</Window>

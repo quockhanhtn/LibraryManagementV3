@@ -151,12 +151,12 @@
 
                <!---Button Cập nhật-->
                <Button Grid.Column="0" ToolTip="Cập nhật" Content="CẬP NHẬT"
-                            Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=pageLibrarianInfor}">
+                       Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=pageLibrarianInfor}">
                </Button>
 
                <!---Button Thôi viêc-->
                <Button Grid.Column="1" ToolTip="Hủy thay đổi" x:Name="btnStatusChange" Content="HỦY THAY ĐỔI"
-                            Command="{Binding CancelUpdateCommand}" CommandParameter="{Binding ElementName=pageLibrarianInfor}">
+                       Command="{Binding CancelUpdateCommand}" CommandParameter="{Binding ElementName=pageLibrarianInfor}">
                </Button>
             </Grid>
          </Grid>

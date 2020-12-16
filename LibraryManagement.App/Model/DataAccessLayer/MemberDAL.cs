@@ -6,22 +6,24 @@ using System.Linq;
 
 namespace LibraryManagement.Model
 {
-   public class LibrarianDAL : IDataGet<Librarian, long>, IDataUpdate<Librarian, long>
+   public class MemberDAL : IDataGet<Member, long>, IDataUpdate<Member, long>
    {
-      public ObservableCollection<Librarian> Gets(EStatusFillter fillter = EStatusFillter.AllStatus)
+      public ObservableCollection<Member> Gets(EStatusFillter fillter = EStatusFillter.AllStatus)
       {
          switch (fillter)
          {
             case EStatusFillter.Active:
-               return EFProvider.Instance.DbEntities.Librarians.Where(x => x.User.UserStatus == true).ToObservableCollection();
+               return EFProvider.Instance.DbEntities.Members.Where(x => x.User.UserStatus == true).ToObservableCollection();
 
             case EStatusFillter.InActive:
-               return EFProvider.Instance.DbEntities.Librarians.Where(x => x.User.UserStatus != true).ToObservableCollection();
+               return EFProvider.Instance.DbEntities.Members.Where(x => x.User.UserStatus != true).ToObservableCollection();
          }
-         return EFProvider.Instance.DbEntities.Librarians.ToObservableCollection();
+         return EFProvider.Instance.DbEntities.Members.ToObservableCollection();
       }
 
-      public ObservableCollection<Librarian> FindSimilar(string keyWord, EStatusFillter fillter = EStatusFillter.AllStatus)
+      public Member GetById(long id) => EFProvider.Instance.DbEntities.Members.Where(x => x.UserId == id).FirstOrDefault();
+
+      public ObservableCollection<Member> FindSimilar(string keyWord, EStatusFillter fillter = EStatusFillter.AllStatus)
       {
          keyWord = keyWord.TrimCheck().RemoveUnicode().ToLower();
 
@@ -43,39 +45,40 @@ namespace LibraryManagement.Model
          }
       }
 
-      public Librarian GetById(long id) => EFProvider.Instance.DbEntities.Librarians.Where(l => l.UserId == id).FirstOrDefault();
-
-      public long Add(Librarian newLibraian)
+      public long Add(Member newMember)
       {
          try
          {
-            var newUserId = UserDAL.Instance.Add(newLibraian.User);
+            var newUserId = UserDAL.Instance.Add(newMember.User);
             if (newUserId != 0)
             {
-               newLibraian.UserId = newUserId;
-               newLibraian.User = EFProvider.Instance.DbEntities.Users.Where(u => u.UserId == newUserId).FirstOrDefault();
-               EFProvider.Instance.SaveEntity(newLibraian, EntityState.Added, true);
+               newMember.UserId = newUserId;
+               newMember.User = EFProvider.Instance.DbEntities.Users.Where(u => u.UserId == newUserId).FirstOrDefault();
+               EFProvider.Instance.SaveEntity(newMember, EntityState.Added, true);
                return newUserId;
             }
+            else { return 0; }
          }
-         catch (Exception e) { Logger.Log(e.Message); }
-
-         return 0;
+         catch (Exception e)
+         {
+            Logger.Log(e.Message);
+            return 0;
+         }
       }
 
-      public bool Update(Librarian objectUpdate)
+      public bool Update(Member objectUpdate)
       {
          try
          {
             if (UserDAL.Instance.Update(objectUpdate.User))
             {
-               var librarian = GetById(objectUpdate.UserId);
-               if (librarian != null)
+               Member member = GetById(objectUpdate.UserId);
+               if (member != null)
                {
-                  librarian.StartDate = objectUpdate.StartDate;
-                  librarian.Salary = objectUpdate.Salary;
+                  member.ExpDate = objectUpdate.ExpDate;
+                  member.RegisterDate = objectUpdate.RegisterDate;
 
-                  EFProvider.Instance.SaveEntity(librarian, EntityState.Modified);
+                  EFProvider.Instance.SaveEntity(member, EntityState.Modified);
                   return true;
                }
             }
@@ -91,21 +94,21 @@ namespace LibraryManagement.Model
 
       #region Singleton Declare
 
-      public static LibrarianDAL Instance
+      public static MemberDAL Instance
       {
          get
          {
-            instance = instance ?? new LibrarianDAL();
+            instance = instance ?? new MemberDAL();
             return instance;
          }
          set { instance = value; }
       }
 
-      private LibrarianDAL()
+      private MemberDAL()
       {
       }
 
-      private static LibrarianDAL instance;
+      private static MemberDAL instance;
 
       #endregion Singleton Declare
    }

@@ -30,287 +30,322 @@
 
       <Grid.ColumnDefinitions>
          <ColumnDefinition />
-         <ColumnDefinition Width="300" />
+         <ColumnDefinition Width="400" />
       </Grid.ColumnDefinitions>
 
       <!-- List chuyên mục sách-->
-      <Grid Grid.Column="0">
-         <materialDesign:Card Style="{StaticResource MaterialDesignPageCard}" Margin="5 5 2.5 5">
-            <Grid>
-               <Grid.RowDefinitions>
-                  <RowDefinition Height="auto" />
-                  <RowDefinition Height="auto" />
-                  <RowDefinition />
-                  <RowDefinition Height="70" />
-               </Grid.RowDefinitions>
+      <materialDesign:Card Grid.Column="0" Style="{StaticResource MaterialDesignPageCard}" Margin="5 5 2.5 5">
+         <Grid>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="auto" />
+               <RowDefinition Height="auto" />
+               <RowDefinition />
+               <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
 
-               <!-- CÁC CHUYÊN MỤC SÁCH-->
-               <TextBlock Grid.Row="0" Text="CÁC CHUYÊN MỤC SÁCH" Style="{StaticResource TitleTextBlock}" />
+            <!-- CÁC CHUYÊN MỤC SÁCH-->
+            <TextBlock Grid.Row="0" Text="CÁC CHUYÊN MỤC SÁCH" Style="{StaticResource TitleTextBlock}" />
 
-               <!--Tìm kiếm và lọc-->
-               <Grid Grid.Row="1" Margin="10 0 10 30">
-                  <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
-                     <ColumnDefinition Width="auto" />
-                  </Grid.ColumnDefinitions>
-                  <DockPanel Grid.Column="1" Margin="5 0" LastChildFill="True">
-                     <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                   ToolTip="Hiển thị các chuyên mục đã xóa" VerticalAlignment="Bottom"
-                                   IsChecked="{Binding IsShowHiddenCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                     <TextBlock Text="Hiển thị các chuyên mục đã ẩn" Foreground="Black" FontWeight="Normal" FontSize="16" Margin="10 0" VerticalAlignment="Bottom" />
-                  </DockPanel>
+            <!--Tìm kiếm và lọc-->
+            <Grid Grid.Row="1" Margin="10 0 10 30">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="auto" />
+               </Grid.ColumnDefinitions>
+               <DockPanel Grid.Column="1" Margin="5 0" LastChildFill="True">
+                  <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                ToolTip="Hiển thị các chuyên mục đã xóa" VerticalAlignment="Bottom"
+                                IsChecked="{Binding IsShowHiddenCategory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                  <TextBlock Text="Hiển thị các chuyên mục đã ẩn" Foreground="Black" FontWeight="Normal" FontSize="16" Margin="10 0" VerticalAlignment="Bottom" />
+               </DockPanel>
 
-                  <TextBox Grid.Column="0" x:Name="txtSearch" Style="{StaticResource MyTextBox}" Margin="10 0" FontSize="18"
-                           materialDesign:HintAssist.Hint="Tìm kiếm chuyên mục sách">
-                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="TextChanged">
-                           <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtSearch}" />
-                        </i:EventTrigger>
-                     </i:Interaction.Triggers>
-                  </TextBox>
-               </Grid>
+               <TextBox Grid.Column="0" x:Name="txtSearch" Style="{StaticResource MyTextBox}" Margin="10 0" FontSize="18"
+                        materialDesign:HintAssist.Hint="Tìm kiếm chuyên mục sách">
+                  <i:Interaction.Triggers>
+                     <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtSearch}" />
+                     </i:EventTrigger>
+                  </i:Interaction.Triggers>
+               </TextBox>
+            </Grid>
 
-               <!-- List CHUYÊN MỤC SÁCH-->
-               <cc:MouseWheelScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                  <DataGrid Margin="10" CanUserSortColumns="True" CanUserAddRows="False" AutoGenerateColumns="False"
-                            materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" IsReadOnly="True"
-                            SelectedItem="{Binding DTOSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                            ItemsSource="{Binding ListDTO, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+            <!-- List CHUYÊN MỤC SÁCH-->
+            <cc:MouseWheelScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+               <DataGrid Margin="10" CanUserSortColumns="True" CanUserAddRows="False" AutoGenerateColumns="False"
+                         materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" IsReadOnly="True"
+                         SelectedItem="{Binding DTOSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         ItemsSource="{Binding ListDTO, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                  <DataGrid.ContextMenu>
+                     <ContextMenu>
+                        <MenuItem Header="Sao chép Mã chuyên mục" Command="{Binding CopyIdCommand}" />
+                        <MenuItem Header="Sao chép Tên chuyên mục" Command="{Binding CopyNameCommand}" />
+                        <Separator />
+                        <MenuItem Header="Ẩn chuyên mục" Command="{Binding StatusOffCommand}" />
+                        <MenuItem Header="Hiển thị chuyên mục" Command="{Binding StatusOnCommand}" />
+                        <Separator />
+                        <MenuItem Header="Xóa chuyên mục" Command="{Binding DeleteCommand}" />
+                     </ContextMenu>
+                  </DataGrid.ContextMenu>
 
-                     <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectionChanged">
-                           <i:InvokeCommandAction Command="{Binding ObjectSelectedChangedCommand}" CommandParameter="{Binding ElementName=pageBookCategoryManager}" />
-                        </i:EventTrigger>
-                     </i:Interaction.Triggers>
-
-                     <DataGrid.ContextMenu>
-                        <ContextMenu>
-                           <MenuItem Header="Sao chép Mã chuyên mục" Command="{Binding CopyIdCommand}" />
-                           <MenuItem Header="Sao chép Tên chuyên mục" Command="{Binding CopyNameCommand}" />
-                           <Separator />
-                           <MenuItem Header="Ẩn/hiện" x:Name="mnuStatusChange" Command="{Binding StatusChangeCommand}" />
-                           <MenuItem Header="Xóa chuyên mục" Command="{Binding DeleteCommand}" />
-                        </ContextMenu>
-                     </DataGrid.ContextMenu>
-
-                     <DataGrid.Columns>
-                        <!--Mã chuyên mục-->
-                        <DataGridTextColumn Binding="{Binding BookCategoryId}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
-                           <DataGridTextColumn.HeaderStyle>
-                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                                 <Setter Property="ContentTemplate">
-                                    <Setter.Value>
-                                       <DataTemplate>
-                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                  <DataGrid.Columns>
+                     <!--Mã chuyên mục-->
+                     <DataGridTextColumn Binding="{Binding BookCategoryId}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                              <Setter Property="ContentTemplate">
+                                 <Setter.Value>
+                                    <DataTemplate>
+                                       <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
                                              <Run Text="Mã"></Run>
                                              <LineBreak />
                                              <Run Text="chuyên mục"></Run>
-                                          </TextBlock>
-                                       </DataTemplate>
-                                    </Setter.Value>
-                                 </Setter>
-                              </Style>
-                           </DataGridTextColumn.HeaderStyle>
-                           <DataGridTextColumn.ElementStyle>
-                              <Style TargetType="{x:Type TextBlock}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                              </Style>
-                           </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
+                                       </TextBlock>
+                                    </DataTemplate>
+                                 </Setter.Value>
+                              </Setter>
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
 
-                        <!--Tên chuyên mục-->
-                        <DataGridTextColumn Binding="{Binding BookCategoryName}" Width="400" Header="Tên chuyên mục" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+                     <!--Tên chuyên mục-->
+                     <DataGridTextColumn Binding="{Binding BookCategoryName}" Width="400" Header="Tên chuyên mục" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
 
-                        <!--Số ngày cho mượn-->
-                        <materialDesign:DataGridTextColumn Binding="{Binding LimitDays}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                           <DataGridTextColumn.HeaderStyle>
-                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                                 <Setter Property="ContentTemplate">
-                                    <Setter.Value>
-                                       <DataTemplate>
-                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                     <!--Số ngày cho mượn-->
+                     <materialDesign:DataGridTextColumn Binding="{Binding LimitDays}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                              <Setter Property="ContentTemplate">
+                                 <Setter.Value>
+                                    <DataTemplate>
+                                       <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
                                              <Run Text="Số ngày"></Run>
                                              <LineBreak />
                                              <Run Text="cho mượn"></Run>
-                                          </TextBlock>
-                                       </DataTemplate>
-                                    </Setter.Value>
-                                 </Setter>
-                              </Style>
-                           </DataGridTextColumn.HeaderStyle>
-                           <DataGridTextColumn.ElementStyle>
-                              <Style TargetType="{x:Type TextBlock}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                              </Style>
-                           </DataGridTextColumn.ElementStyle>
-                        </materialDesign:DataGridTextColumn>
+                                       </TextBlock>
+                                    </DataTemplate>
+                                 </Setter.Value>
+                              </Setter>
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </materialDesign:DataGridTextColumn>
 
-                        <!--Số lượng đầu sách-->
-                        <materialDesign:DataGridTextColumn Binding="{Binding NumberOfBook}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                           <DataGridTextColumn.HeaderStyle>
-                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                                 <Setter Property="ContentTemplate">
-                                    <Setter.Value>
-                                       <DataTemplate>
-                                          <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                     <!--Số lượng đầu sách-->
+                     <materialDesign:DataGridTextColumn Binding="{Binding NumberOfBook}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                              <Setter Property="ContentTemplate">
+                                 <Setter.Value>
+                                    <DataTemplate>
+                                       <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
                                              <Run Text="Số lượng"></Run>
                                              <LineBreak />
                                              <Run Text="đầu sách"></Run>
-                                          </TextBlock>
-                                       </DataTemplate>
-                                    </Setter.Value>
-                                 </Setter>
-                              </Style>
-                           </DataGridTextColumn.HeaderStyle>
-                           <DataGridTextColumn.ElementStyle>
-                              <Style TargetType="{x:Type TextBlock}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                              </Style>
-                           </DataGridTextColumn.ElementStyle>
-                        </materialDesign:DataGridTextColumn>
+                                       </TextBlock>
+                                    </DataTemplate>
+                                 </Setter.Value>
+                              </Setter>
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </materialDesign:DataGridTextColumn>
 
-                        <!--Trạng thái-->
-                        <materialDesign:DataGridTextColumn Binding="{Binding BookCategoryStatus}" Header="Trạng thái" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                           <DataGridTextColumn.HeaderStyle>
-                              <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                              </Style>
-                           </DataGridTextColumn.HeaderStyle>
-                           <DataGridTextColumn.ElementStyle>
-                              <Style TargetType="{x:Type TextBlock}">
-                                 <Setter Property="HorizontalAlignment" Value="Center" />
-                              </Style>
-                           </DataGridTextColumn.ElementStyle>
-                        </materialDesign:DataGridTextColumn>
+                     <!--Trạng thái-->
+                     <materialDesign:DataGridTextColumn Binding="{Binding StatusDisplay}" Header="Trạng thái" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </materialDesign:DataGridTextColumn>
+                  </DataGrid.Columns>
+               </DataGrid>
+            </cc:MouseWheelScrollViewer>
 
-                        <DataGridTemplateColumn Header="Trạng thái">
-                           <DataGridTemplateColumn.CellTemplate>
-                              <DataTemplate>
-                                 <!--<ToggleButton IsChecked="{Binding BookCategoryStatus, UpdateSourceTrigger=PropertyChanged}" />-->
-                                 <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                               IsChecked="{Binding BookCategoryStatus, UpdateSourceTrigger=PropertyChanged}">
-                                    <materialDesign:PackIcon Kind="Eye"></materialDesign:PackIcon>
-                                    <materialDesign:ToggleButtonAssist.OnContent>
-                                       <materialDesign:PackIcon Kind="Eyedropper" />
-                                    </materialDesign:ToggleButtonAssist.OnContent>
-                                 </ToggleButton>
-                              </DataTemplate>
-                           </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                     </DataGrid.Columns>
-                  </DataGrid>
-               </cc:MouseWheelScrollViewer>
+            <materialDesign:Snackbar MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="2" VerticalAlignment="Bottom" />
 
-               <Grid Grid.Row="3">
-                  <Grid Grid.Row="3">
+            <!--Button after datagrid-->
+            <StackPanel Grid.Row="3" HorizontalAlignment="Right" Margin="10 0" Orientation="Horizontal">
+               <StackPanel.Resources>
+                  <Style TargetType="Grid">
+                     <Setter Property="Width" Value="160" />
+                     <Setter Property="Margin" Value="0 2 0 0" />
+                  </Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                     <Setter Property="Width" Value="200" />
+                     <Setter Property="Margin" Value="5" />
+                  </Style>
+                  <Style TargetType="TextBlock">
+                     <Setter Property="VerticalAlignment" Value="Center" />
+                     <Setter Property="HorizontalAlignment" Value="Right" />
+                  </Style>
+                  <Style TargetType="materialDesign:PackIcon">
+                     <Setter Property="Width" Value="25" />
+                     <Setter Property="Height" Value="25" />
+                  </Style>
+               </StackPanel.Resources>
+
+               <!--Btn Export Excell-->
+               <Button Command="{Binding ExportToExcelCommand}" ToolTip="Xuất danh sách thủ thư ra file Excel">
+                  <Grid>
                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="auto" />
                         <ColumnDefinition />
                      </Grid.ColumnDefinitions>
-
-                     <!---Button Thêm nhân viên mới-->
-                     <Button Grid.Column="2" Margin="10" ToolTip="Thêm nhân viên mới" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=pageBookCategoryManager}">
-                        <DockPanel LastChildFill="True" Margin="0" HorizontalAlignment="Right">
-                           <materialDesign:PackIcon Kind="Category" Grid.Column="0" Margin="-20 0 10 0" />
-                           <TextBlock Text="THÊM CHUYÊN MỤC MỚI" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
-                        </DockPanel>
-                     </Button>
-
-                     <Button Grid.Column="1" Command="{Binding ExportToExcelCommand}" Margin="10"
-                                    ToolTip="Xuất danh sách nhân viên thư viện ra file Excel">
-                        <DockPanel LastChildFill="True" Margin="0" HorizontalAlignment="Stretch">
-                           <materialDesign:PackIcon Kind="FileExcel" Grid.Column="0" />
-                           <TextBlock Text="XUẤT FILE EXCEL" HorizontalAlignment="Stretch" VerticalAlignment="Center"></TextBlock>
-                        </DockPanel>
-                     </Button>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="FileExcel" />
+                     <TextBlock Text="XUẤT FILE EXCEL" Grid.Column="1"></TextBlock>
                   </Grid>
-               </Grid>
-            </Grid>
-         </materialDesign:Card>
-      </Grid>
+               </Button>
 
-      <Grid Grid.Column="1">
-         <materialDesign:Card Style="{StaticResource MaterialDesignPageCard}" Margin="2.5 5 5 5">
-            <Grid>
-               <Grid.RowDefinitions>
-                  <RowDefinition Height="auto" />
-                  <RowDefinition />
-                  <RowDefinition Height="140" />
-               </Grid.RowDefinitions>
+               <!--Button Add-->
+               <Button Command="{Binding AddCommand}" ToolTip="Thêm chuyên mục mới">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Add" />
+                     <TextBlock Text="THÊM CHUYÊN MỤC" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
 
-               <!---Tiêu đề "THÔNG TIN CHUYÊN MỤC SÁCH"-->
-               <TextBlock Grid.Row="0" Style="{StaticResource TitleTextBlock}">
+               <!--Button Update-->
+               <Button Command="{Binding UpdateCommand}" ToolTip="Chỉnh sửa chuyên mục">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Edit" />
+                     <TextBlock Text="SỬA CHUYÊN MỤC" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+            </StackPanel>
+         </Grid>
+      </materialDesign:Card>
+
+      <materialDesign:Card Grid.Column="1" Style="{StaticResource MaterialDesignPageCard}" Margin="2.5 5 5 5">
+         <Grid>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="auto" />
+               <RowDefinition />
+               <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <!---Tiêu đề "THÔNG TIN CHUYÊN MỤC SÁCH"-->
+            <TextBlock Grid.Row="0" Style="{StaticResource TitleTextBlock}">
                   <Run Text="THÔNG TIN"></Run>
                   <LineBreak></LineBreak>
                   <Run Text="CHUYÊN MỤC SÁCH"></Run>
-               </TextBlock>
+            </TextBlock>
 
-               <!---Thông tin CHUYÊN MỤC-->
-               <ScrollViewer Grid.Row="1" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                  <StackPanel>
-                     <StackPanel.Resources>
-                        <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}">
-                           <Setter Property="Margin" Value="20 20" />
-                           <Setter Property="FontSize" Value="18" />
-                        </Style>
-                        <Style TargetType="TextBlock" BasedOn="{StaticResource WarningTextBlock}">
-                        </Style>
-                     </StackPanel.Resources>
+            <!---Thông tin CHUYÊN MỤC-->
+            <ScrollViewer Grid.Row="1" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+               <StackPanel>
+                  <StackPanel.Resources>
+                     <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}">
+                        <Setter Property="Margin" Value="20 20" />
+                        <Setter Property="FontSize" Value="18" />
+                     </Style>
+                     <Style TargetType="TextBlock" BasedOn="{StaticResource WarningTextBlock}">
+                     </Style>
+                  </StackPanel.Resources>
 
-                     <!---Mã CHUYÊN MỤC-->
-                     <TextBox materialDesign:HintAssist.Hint="Mã chuyên mục" IsReadOnly="True"
-                              Text="{Binding DTOSelected.BookCategoryId, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
+                  <!---Mã CHUYÊN MỤC-->
+                  <TextBox materialDesign:HintAssist.Hint="Mã chuyên mục" IsReadOnly="True"
+                           Text="{Binding DTOSelected.BookCategoryId, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
-                     <!---TÊn chuyên mục-->
-                     <TextBox materialDesign:HintAssist.Hint="Tên chuyên mục" x:Name="txtName" MaxLength="50"
-                              Text="{Binding DTOSelected.BookCategoryName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
-                     <TextBlock Text="Tên chuyên mục không được để trống" x:Name="tblNameWarning" />
+                  <!---TÊn chuyên mục-->
+                  <TextBox materialDesign:HintAssist.Hint="Tên chuyên mục" x:Name="txtName" MaxLength="50"
+                           Text="{Binding DTOSelected.BookCategoryName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
 
-                     <!---Tên-->
-                     <TextBox materialDesign:HintAssist.Hint="Số ngày cho mượn" x:Name="txtLimitDays" MaxLength="10"
+                  <!---Tên-->
+                  <TextBox materialDesign:HintAssist.Hint="Số ngày cho mượn" x:Name="txtLimitDays" MaxLength="10"
                               Text="{Binding DTOSelected.LimitDays, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
-                     <TextBlock Text="Vui lòng nhập số nguyên dương" x:Name="tblLimitDaysWarning" />
 
-                     <!---Số lượng đầu sách-->
-                     <TextBox materialDesign:HintAssist.Hint="Số lượng đầu sách" IsReadOnly="True"
+                  <!---Số lượng đầu sách-->
+                  <TextBox materialDesign:HintAssist.Hint="Số lượng đầu sách" IsReadOnly="True"
                               Text="{Binding DTOSelected.NumberOfBook, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
-                  </StackPanel>
-               </ScrollViewer>
+               </StackPanel>
+            </ScrollViewer>
 
-               <!--Button-->
-               <Grid Grid.Row="2" Margin="5">
-                  <Grid.RowDefinitions>
-                     <RowDefinition />
-                     <RowDefinition />
-                  </Grid.RowDefinitions>
-                  <Grid.ColumnDefinitions>
-                     <ColumnDefinition />
-                     <ColumnDefinition />
-                  </Grid.ColumnDefinitions>
+            <!--Button-->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+               <StackPanel.Resources>
+                  <Style TargetType="Grid">
+                     <Setter Property="Width" Value="70" />
+                  </Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                     <Setter Property="Width" Value="110" />
+                     <Setter Property="Margin" Value="5" />
+                  </Style>
+                  <Style TargetType="TextBlock">
+                     <Setter Property="VerticalAlignment" Value="Center" />
+                     <Setter Property="HorizontalAlignment" Value="Right" />
+                  </Style>
+                  <Style TargetType="materialDesign:PackIcon">
+                     <Setter Property="Width" Value="25" />
+                     <Setter Property="Height" Value="25" />
+                  </Style>
+               </StackPanel.Resources>
 
-                  <!---Button Cập nhật-->
-                  <Button Grid.ColumnSpan="2" Grid.Row="0" ToolTip="Cập nhật" Content="CẬP NHẬT"
-                          Command="{Binding UpdateCommand}" CommandParameter="{Binding ElementName=pageBookCategoryManager}">
-                  </Button>
+               <!--Button Status Off-->
+               <Button Command="{Binding StatusOffCommand}" ToolTip="Ẩn chuyên mục">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="EyeOff" />
+                     <TextBlock Text="ẨN" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
 
-                  <!---Button Xóa-->
-                  <Button Grid.Column="0" Grid.Row="1" ToolTip="Ẩn chuyên mục" x:Name="btnStatusChange" Content="ẨN"
-                          Command="{Binding StatusChangeCommand}">
-                  </Button>
+               <!--Button Status On-->
+               <Button Command="{Binding StatusOnCommand}" ToolTip="Hiện chuyên mục">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Eye" />
+                     <TextBlock Text="HIỆN" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
 
-                  <!---Button Xóa vĩnh viễn-->
-                  <Button Grid.Column="1" Grid.Row="1" ToolTip="Xóa vĩnh viễn" Content="XÓA"
-                          Command="{Binding DeleteCommand}" CommandParameter="{Binding ElementName=pageBookCategoryManager}">
-                  </Button>
-               </Grid>
-            </Grid>
-         </materialDesign:Card>
-      </Grid>
-
-      <materialDesign:Snackbar MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.ColumnSpan="2" />
+               <Button Command="{Binding DeleteCommand}" ToolTip="Xóa chuyên mục">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Delete" />
+                     <TextBlock Text="XÓA" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+            </StackPanel>
+         </Grid>
+      </materialDesign:Card>
    </Grid>
 </UserControl>

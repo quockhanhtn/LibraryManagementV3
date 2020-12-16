@@ -23,6 +23,28 @@
             public static string Member = "MEMBER";
             public static string UnVerified = "UN_VERIFIED";
          }
+
+         public static string StringToGender(string gender)
+         {
+            if (gender.Equals("Nam")) { return "M"; }
+            else if (gender.Equals("Nữ")) { return "F"; }
+            else { return "O"; }
+         }
+
+         public static string GenderToString(string gender)
+         {
+            if (string.IsNullOrEmpty(gender)) { return "Khác"; }
+
+            if (gender.ToLower().StartsWith("f"))
+            {
+               return "Nữ";
+            }
+            else if (gender.ToLower().StartsWith("m"))
+            {
+               return "Nam";
+            }
+            else { return "Khác"; }
+         }
       }
    }
 }

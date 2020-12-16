@@ -2,7 +2,7 @@
 {
    public partial class BookCategory
    {
-      public string Note { get { return (this.BookCategoryStatus != true) ? "Đã ẩn" : ""; } }
+      public string StatusDisplay { get { return (this.BookCategoryStatus != true) ? "Đã ẩn" : "Hiển thị"; } }
       public int NumberOfBook { get => BookInfoes.Count; }
    }
 }

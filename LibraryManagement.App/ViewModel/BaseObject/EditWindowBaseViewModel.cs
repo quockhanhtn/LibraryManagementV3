@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 
 namespace LibraryManagement.ViewModel
 {
@@ -22,10 +23,19 @@ namespace LibraryManagement.ViewModel
       protected EditWindowBaseViewModel(T editObject)
       {
          Load(editObject);
+
+         SaveChangeCommand = new RelayCommand<Window>((p) => p != null, (p) => SaveChange(p));
+         CanncelCommand = new RelayCommand<Window>((p) => p != null, (p) => Cancel(p));
       }
 
-      protected virtual void Load(T editObject)
+      protected virtual void Load(T editObject) { }
+
+      protected virtual void SaveChange(Window p) { }
+
+      protected void Cancel(Window p)
       {
+         EditResult = false;
+         p.Close();
       }
    }
 }

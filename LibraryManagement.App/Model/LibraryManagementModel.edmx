@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LibraryManagement.Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="LibraryManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Author">
           <Key>
             <PropertyRef Name="AuthorId" />
@@ -89,7 +89,7 @@
           <Property Name="PublisherName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="15" />
           <Property Name="Address" Type="nvarchar" MaxLength="100" />
-          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="Website" Type="varchar" MaxLength="40" />
           <Property Name="PublisherStatus" Type="bit" Nullable="false" />
         </EntityType>
@@ -110,7 +110,7 @@
           <Property Name="FirstName" Type="nvarchar" MaxLength="10" />
           <Property Name="LastName" Type="nvarchar" MaxLength="30" />
           <Property Name="Gender" Type="varchar" MaxLength="1" />
-          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="DateOfBirth" Type="date" Nullable="false" />
           <Property Name="Ssn" Type="varchar" MaxLength="12" />
           <Property Name="Address" Type="nvarchar" MaxLength="100" />
           <Property Name="PhoneNumber" Type="varchar" MaxLength="15" />
@@ -330,7 +330,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="LibraryManagement.Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="LibraryManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Author">
           <Key>
             <PropertyRef Name="AuthorId" />
@@ -424,7 +424,7 @@
           <Property Name="PublisherName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Website" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="PublisherStatus" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="BookInfoes" Relationship="Self.PK_BookInfo_Publisher" FromRole="Publisher" ToRole="BookInfo" />
@@ -448,7 +448,7 @@
           <Property Name="FirstName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Ssn" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
@@ -648,7 +648,7 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LibraryManagementModelStoreContainer" CdmEntityContainer="LibraryManagementEntities">
           <EntitySetMapping Name="Authors">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Author">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Author">
               <MappingFragment StoreEntitySet="Author">
                 <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
                 <ScalarProperty Name="NickName" ColumnName="NickName" />
@@ -658,7 +658,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BookCategories">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.BookCategory">
+            <EntityTypeMapping TypeName="LibraryManagementModel.BookCategory">
               <MappingFragment StoreEntitySet="BookCategory">
                 <ScalarProperty Name="BookCategoryId" ColumnName="BookCategoryId" />
                 <ScalarProperty Name="BookCategoryName" ColumnName="BookCategoryName" />
@@ -668,7 +668,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BookInfoes">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.BookInfo">
+            <EntityTypeMapping TypeName="LibraryManagementModel.BookInfo">
               <MappingFragment StoreEntitySet="BookInfo">
                 <ScalarProperty Name="BookInfoId" ColumnName="BookInfoId" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -685,7 +685,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BookItems">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.BookItem">
+            <EntityTypeMapping TypeName="LibraryManagementModel.BookItem">
               <MappingFragment StoreEntitySet="BookItem">
                 <ScalarProperty Name="BookItemId" ColumnName="BookItemId" />
                 <ScalarProperty Name="BookInfoId" ColumnName="BookInfoId" />
@@ -693,7 +693,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Borrows">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Borrow">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Borrow">
               <MappingFragment StoreEntitySet="Borrow">
                 <ScalarProperty Name="BorrowId" ColumnName="BorrowId" />
                 <ScalarProperty Name="BookItemId" ColumnName="BookItemId" />
@@ -705,7 +705,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Librarians">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Librarian">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Librarian">
               <MappingFragment StoreEntitySet="Librarian">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
@@ -714,7 +714,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Members">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Member">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Member">
               <MappingFragment StoreEntitySet="Member">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
@@ -723,7 +723,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Publishers">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Publisher">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Publisher">
               <MappingFragment StoreEntitySet="Publisher">
                 <ScalarProperty Name="PublisherId" ColumnName="PublisherId" />
                 <ScalarProperty Name="PublisherName" ColumnName="PublisherName" />
@@ -736,7 +736,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Returns">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.Return">
+            <EntityTypeMapping TypeName="LibraryManagementModel.Return">
               <MappingFragment StoreEntitySet="Return">
                 <ScalarProperty Name="BorrowId" ColumnName="BorrowId" />
                 <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
@@ -745,7 +745,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="LibraryManagement.Model.User">
+            <EntityTypeMapping TypeName="LibraryManagementModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -764,7 +764,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="BookAuthor" TypeName="LibraryManagement.Model.BookAuthor" StoreEntitySet="BookAuthor">
+          <AssociationSetMapping Name="BookAuthor" TypeName="LibraryManagementModel.BookAuthor" StoreEntitySet="BookAuthor">
             <EndProperty Name="Author">
               <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
             </EndProperty>

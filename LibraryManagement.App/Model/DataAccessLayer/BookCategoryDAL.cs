@@ -1,5 +1,5 @@
 ﻿using LibraryManagement.Utils;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
@@ -10,22 +10,15 @@ namespace LibraryManagement.Model
    {
       public ObservableCollection<BookCategory> Gets(EStatusFillter fillter = EStatusFillter.AllStatus)
       {
-         var entities = new List<BookCategory>();
          switch (fillter)
          {
-            case EStatusFillter.AllStatus:
-               entities = EFProvider.Instance.DbEntities.BookCategories.ToList();
-               break;
-
             case EStatusFillter.Active:
-               entities = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus == true).ToList();
-               break;
+               return EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus == true).ToObservableCollection();
 
             case EStatusFillter.InActive:
-               entities = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus == false).ToList();
-               break;
+               return EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryStatus != true).ToObservableCollection();
          }
-         return entities.ToObservableCollection();
+         return EFProvider.Instance.DbEntities.BookCategories.ToObservableCollection();
       }
 
       public BookCategory GetById(long id) => EFProvider.Instance.DbEntities.BookCategories.Where(bc => bc.BookCategoryId == id).FirstOrDefault();
@@ -46,50 +39,69 @@ namespace LibraryManagement.Model
 
       public long Add(BookCategory newObject)
       {
-         EFProvider.Instance.SaveEntity(newObject, EntityState.Added, true);
-         return newObject.BookCategoryId;
+         try
+         {
+            EFProvider.Instance.SaveEntity(newObject, EntityState.Added, true);
+            return newObject.BookCategoryId;
+         }
+         catch (Exception e)
+         {
+            Logger.Log(e.Message);
+            return 0;
+         }
       }
 
       public bool Update(BookCategory objectUpdate)
       {
-         var bookCategoryUpdate = GetById(objectUpdate.BookCategoryId);
-         if (bookCategoryUpdate != null)
+         try
          {
-            bookCategoryUpdate.BookCategoryName = objectUpdate.BookCategoryName;
-            bookCategoryUpdate.LimitDays = objectUpdate.LimitDays;
+            var bookCategoryUpdate = GetById(objectUpdate.BookCategoryId);
+            if (bookCategoryUpdate != null)
+            {
+               bookCategoryUpdate.BookCategoryName = objectUpdate.BookCategoryName;
+               bookCategoryUpdate.LimitDays = objectUpdate.LimitDays;
 
-            EFProvider.Instance.SaveEntity(bookCategoryUpdate, EntityState.Modified, true);
-            return true;
+               EFProvider.Instance.SaveEntity(bookCategoryUpdate, EntityState.Modified, true);
+               return true;
+            }
          }
-         else { return false; }
+         catch (Exception e) { Logger.Log(e.Message); }
+
+         return false;
       }
 
       public bool ChangeStatus(long objectId)
       {
-         var bookCategoryUpdate = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryId == objectId).SingleOrDefault();
-         if (bookCategoryUpdate != null)
+         try
          {
-            bookCategoryUpdate.BookCategoryStatus = (bookCategoryUpdate.BookCategoryStatus != true);
-            EFProvider.Instance.SaveEntity(bookCategoryUpdate, EntityState.Modified, true);
-            return true;
+            var bookCategoryUpdate = GetById(objectId);
+            if (bookCategoryUpdate != null)
+            {
+               bookCategoryUpdate.BookCategoryStatus = (bookCategoryUpdate.BookCategoryStatus != true);
+               EFProvider.Instance.SaveEntity(bookCategoryUpdate, EntityState.Modified, true);
+               return true;
+            }
          }
-         else { return false; }
+         catch (Exception e) { Logger.Log(e.Message); }
+         
+         return false;
       }
 
       public bool Delete(long objectId)
       {
-         var bookCategoryDelete = EFProvider.Instance.DbEntities.BookCategories.Where(x => x.BookCategoryId == objectId).SingleOrDefault();
-
-         if (bookCategoryDelete != null)
+         try
          {
-            EFProvider.Instance.DbEntities.BookCategories.Remove(bookCategoryDelete);
+            EFProvider.Instance.DbEntities.BookCategories.Remove(GetById(objectId));
             EFProvider.Instance.DbEntities.SaveChanges();
             return true;
          }
-         else { return false; }
+         catch (Exception e) { Logger.Log(e.Message); }
+         
+         return false; 
       }
 
       #region Singleton Declare
+
       public static BookCategoryDAL Instance
       {
          get
@@ -105,6 +117,7 @@ namespace LibraryManagement.Model
       }
 
       private static BookCategoryDAL instance;
-      #endregion
+
+      #endregion Singleton Declare
    }
 }

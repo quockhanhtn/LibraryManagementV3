@@ -51,7 +51,7 @@ namespace LibraryManagement.ViewModel
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.LastName);
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.FirstName);
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.GenderDisplay);
-                     worksheet.WriteCell(rowIndex, colIndex++, item.User.DateOfBirth?.ToString("dd/MM/yyyy"));
+                     worksheet.WriteCell(rowIndex, colIndex++, item.User.DateOfBirth.ToString("dd/MM/yyyy"));
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.Ssn);
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.Address);
                      worksheet.WriteCell(rowIndex, colIndex++, item.User.PhoneNumber);

@@ -1,6 +1,7 @@
 ﻿using LibraryManagement.CustomControl;
 using LibraryManagement.Model;
 using LibraryManagement.Utils;
+using LibraryManagement.View.EditWindow;
 using OfficeOpenXml;
 using System;
 using System.Threading;
@@ -12,7 +13,6 @@ namespace LibraryManagement.ViewModel
 {
    public class PageManagerBookCategoryViewModel : PageManagerBaseViewModel<BookCategory>
    {
-      public ICommand ObjectSelectedChangedCommand { get; set; }
       public ICommand CopyIdCommand { get; set; }
       public ICommand CopyNameCommand { get; set; }
 
@@ -44,24 +44,6 @@ namespace LibraryManagement.ViewModel
             ListDTO = BookCategoryDAL.Instance.FindSimilar(p.Text, IsShowHiddenCategory ? EStatusFillter.AllStatus : EStatusFillter.Active);
          });
 
-         ObjectSelectedChangedCommand = new RelayCommand<UserControl>((p) => { return p != null && DTOSelected != null; }, (p) =>
-         {
-            var btnStatusChange = p.FindName("btnStatusChange") as Button;
-            var mnuStatusChange = p.FindName("mnuStatusChange") as MenuItem;
-            if (DTOSelected.BookCategoryStatus == true)
-            {
-               btnStatusChange.Content = "ẨN";
-               btnStatusChange.ToolTip = "Ẩn chuyên mục \"" + DTOSelected.BookCategoryName + "\"";
-               mnuStatusChange.Header = "Ẩn chuyên mục";
-            }
-            else
-            {
-               btnStatusChange.Content = "HIỂN THỊ";
-               btnStatusChange.ToolTip = "Hiển thị chuyên mục \"" + DTOSelected.BookCategoryName + "\"";
-               mnuStatusChange.Header = "Hiển thị chuyên mục";
-            }
-         });
-
          ExportToExcelCommand = new RelayCommand<object>((p) => { return true; }, (p) =>
          {
             string filePath = DialogUtils.ShowSaveFileDialog("Xuất danh chuyên mục sách", "Excel | *.xlsx | Excel 2003 | *.xls");
@@ -71,13 +53,10 @@ namespace LibraryManagement.ViewModel
             {
                using (var excelPackage = ExcelHelper.CreateExcelPackage("Library Manger", "Danh sách chuyên mục sách", new string[] { "List BookCategory Sheet" }))
                {
+                  string[] columnHeaders = { "Mã chuyên mục", "Tên chuyên mục", "Số ngày cho mượn", "Số lượng sách", "Trạng thái" };
+                  double[] columnWidths = new double[] { 30, 30, 30, 30, 30 };
                   ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[0];
-                  worksheet.SetColumWidth(new double[] { 30, 30, 30, 30, 30 });
-
-                  string[] columnHeaders = { "Mã chuyên mục", "Tên chuyên mục", "Số ngày cho mượn", "Số lượng sách", "Ghi chú" };
-
-                  worksheet.SetTitleAndDateTime("Thống kê chuyên mục sách", DateTime.Now, columnHeaders.Length);
-                  worksheet.SetHeader(columnHeaders);
+                  StyleExcelWorkSheet(worksheet, "Thống kê chuyên mục sách", columnHeaders, columnWidths);
 
                   int colIndex = 1, rowIndex = 4;  // bắt đầu từ cột A, hàng 3 (do hàng 1 ghi tiêu đề, hàng 2 ghi ngày giờ, hàng 3 ghi header)
                   foreach (var item in ListDTO)
@@ -86,7 +65,7 @@ namespace LibraryManagement.ViewModel
                      worksheet.WriteCell(rowIndex, colIndex++, item.BookCategoryName);
                      worksheet.WriteCell(rowIndex, colIndex++, item.LimitDays);
                      worksheet.WriteCell(rowIndex, colIndex++, item.NumberOfBook);
-                     worksheet.WriteCell(rowIndex, colIndex++, item.Note);
+                     worksheet.WriteCell(rowIndex, colIndex++, item.StatusDisplay);
 
                      colIndex = 1;
                      rowIndex++;
@@ -94,11 +73,7 @@ namespace LibraryManagement.ViewModel
                   ExcelHelper.SaveExcelPackage(excelPackage, filePath);
                }
 
-               var messageBoxResult = CustomMessageBox.Show("Bạn có muốn mở file excel vừa xuất không ?", "Xuất file Excel thành công !", MessageBoxButton.YesNo, MessageBoxImage.Information, MessageBoxResult.Yes);
-               if (messageBoxResult == MessageBoxResult.Yes)
-               {
-                  ExcelHelper.OpenFile(filePath);
-               }
+               ShowSnackbarMessage("Xuất file Excel thành công !", "Mở", () => ExcelHelper.OpenFile(filePath), 10);
             }
             catch (Exception e)
             {
@@ -106,72 +81,44 @@ namespace LibraryManagement.ViewModel
             }
          });
 
-         AddCommand = new RelayCommand<UserControl>((p) => { return p != null; }, (p) =>
+         AddCommand = new RelayCommand<object>((p) => true, (p) =>
          {
-            //var addDataContext = new AddBookCategoryWindowVM();
-            //var addBookCategoryWindow = new AddBookCategoryWindow() { DataContext = addDataContext };
-            //addBookCategoryWindow.ShowDialog();
-
-            //var mySnackbar = p.FindName("mySnackbar") as Snackbar;
-            //if (addDataContext.Result != null)
-            //{
-            //   mySnackbar.MessageQueue.Enqueue("Thêm chuyên mục \"" + addDataContext.Result.Name + "\" thành công");
-            //   ReloadList();
-            //}
-            //else { mySnackbar.MessageQueue.Enqueue("Không có thay đổi"); }
+            if (EditBookCategoryWindow.Show())
+            {
+               ShowSnackbarMessage("Thêm chuyên mục thành công !");
+               ReloadList();
+            }
+            else { ShowSnackbarMessage("Không có thay đổi"); }
          });
 
-         UpdateCommand = new RelayCommand<UserControl>((p) => { return p != null && DTOSelected != null; }, (p) =>
+         UpdateCommand = new RelayCommand<object>((p) => DTOSelected != null, (p) =>
          {
-            //var txtName = p.FindName("txtName") as TextBox;
-            //var txtLimitDays = p.FindName("txtLimitDays") as TextBox;
-            //var tblNameWarning = p.FindName("tblNameWarning") as TextBlock;
-            //var tblLimitDaysWarning = p.FindName("tblLimitDaysWarning") as TextBlock;
-
-            //if (txtName.Text == "")
-            //{
-            //   tblNameWarning.Visibility = Visibility.Visible;
-            //   txtName.Focus();
-            //   return;
-            //}
-            //else { tblNameWarning.Visibility = Visibility.Hidden; }
-
-            //if (StringHelper.ToInt(txtLimitDays.Text) == 0)
-            //{
-            //   tblLimitDaysWarning.Visibility = Visibility.Visible;
-            //   txtLimitDays.Focus();
-            //   return;
-            //}
-            //else { tblLimitDaysWarning.Visibility = Visibility.Hidden; }
-
-            //DTOSelected.Name = txtName.Text;
-            //DTOSelected.LimitDays = StringHelper.ToInt(txtLimitDays.Text);
-
-            //BookCategoryDAL.Instance.Update(DTOSelected);
-            //var mySnackbar = p.FindName("mySnackbar") as Snackbar;
-            //mySnackbar.MessageQueue.Enqueue("Cập nhật chuyên mục \"" + DTOSelected.Name + "\" thành công");
-            //ReloadList();
+            if (EditBookCategoryWindow.Show(DTOSelected))
+            {
+               ShowSnackbarMessage("Cập nhật chuyên mục thành công !");
+               ReloadList();
+            }
+            else { ShowSnackbarMessage("Không có thay đổi"); }
          });
 
-         //StatusChangeCommand = new RelayCommand<object>((p) => { return DTOSelected != null; }, (p) =>
-         //{
-         //   BookCategoryDAL.Instance.ChangeStatus(DTOSelected.BookCategoryId);
-         //   ReloadList();
-         //});
+         StatusOnCommand = new RelayCommand<object>((p) => DTOSelected != null && DTOSelected.BookCategoryStatus != true, (p) => ChangeStatus());
 
-         DeleteCommand = new RelayCommand<object>((p) => { return DTOSelected != null && DTOSelected.NumberOfBook == 0; }, (p) =>
+         StatusOffCommand = new RelayCommand<object>((p) => DTOSelected != null && DTOSelected.BookCategoryStatus == true, (p) => ChangeStatus());
+
+         DeleteCommand = new RelayCommand<object>((p) => DTOSelected != null && DTOSelected.NumberOfBook == 0, (p) =>
          {
             var deleteSucceed = BookCategoryDAL.Instance.Delete(DTOSelected.BookCategoryId);
 
             if (deleteSucceed)
             {
+               ReloadList();
+               ShowSnackbarMessage("Xóa chuyên mục thành công !");
             }
             else
             {
+               ReloadList();
+               ShowSnackbarMessage("Không có thay đổi !");
             }
-
-            ReloadList();
-            ShowSnackbarMessage("Xóa chuyên mục thành công !");
          });
 
          CopyIdCommand = new RelayCommand<object>((p) => { return DTOSelected != null; }, (p) =>
@@ -185,6 +132,16 @@ namespace LibraryManagement.ViewModel
             Clipboard.SetText(DTOSelected.BookCategoryName);
             ShowSnackbarMessage("Copy 'Tên chuyên mục' thành công !");
          });
+      }
+
+      private void ChangeStatus()
+      {
+         if (BookCategoryDAL.Instance.ChangeStatus(DTOSelected.BookCategoryId))
+         {
+            ShowSnackbarMessage("Cập nhật thành công !");
+            ReloadList();
+         }
+         else { ShowSnackbarMessage("Cập nhật thất bại"); }
       }
 
       private void ReloadList()

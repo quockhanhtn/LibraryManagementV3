@@ -7,6 +7,11 @@ namespace LibraryManagement.Model
 {
    public class UserDAL : IDataUpdate<User, long>, IUserLogin<User>
    {
+      public bool CheckEmail(long userId, string email) => EFProvider.Instance.DbEntities.Users.Where(u => u.Email == email && u.UserId != userId).FirstOrDefault() == null;
+      public bool CheckSsn(long userId, string ssn) => EFProvider.Instance.DbEntities.Users.Where(u => u.Ssn == ssn && u.UserId != userId).FirstOrDefault() == null;
+      public bool CheckPhonenumber(long userId, string phoneNumber) => EFProvider.Instance.DbEntities.Users.Where(u => u.PhoneNumber == phoneNumber && u.UserId != userId).FirstOrDefault() == null;
+      public bool CheckUsername(long userId, string username) => EFProvider.Instance.DbEntities.Users.Where(u => u.Username == username && u.UserId != userId).FirstOrDefault() == null;
+
       public User Login(string userInput, string passwordPlantext)
       {
          userInput = userInput.TrimCheck();
@@ -63,42 +68,52 @@ namespace LibraryManagement.Model
          }
          catch (Exception e)
          {
-            _ = e.Message;
+            Logger.Log(e.Message);
             return 0;
          }
       }
 
       public bool Update(User objectUpdate)
       {
-         var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectUpdate.UserId).SingleOrDefault();
-
-         if (user != null)
+         try
          {
-            user.LastName = objectUpdate.LastName;
-            user.FirstName = objectUpdate.FirstName;
-            user.Gender = objectUpdate.Gender;
-            user.DateOfBirth = objectUpdate.DateOfBirth;
-            user.Ssn = objectUpdate.Ssn;
+            var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectUpdate.UserId).SingleOrDefault();
 
-            user.Address = objectUpdate.Address;
-            user.Email = objectUpdate.Email;
-            user.PhoneNumber = objectUpdate.PhoneNumber;
+            if (user != null)
+            {
+               user.LastName = objectUpdate.LastName;
+               user.FirstName = objectUpdate.FirstName;
+               user.Gender = objectUpdate.Gender;
+               user.DateOfBirth = objectUpdate.DateOfBirth;
+               user.Ssn = objectUpdate.Ssn;
 
-            EFProvider.Instance.SaveEntity(user, EntityState.Modified);
-            return true;
+               user.Address = objectUpdate.Address;
+               user.Email = objectUpdate.Email;
+               user.PhoneNumber = objectUpdate.PhoneNumber;
+
+               EFProvider.Instance.SaveEntity(user, EntityState.Modified);
+               return true;
+            }
          }
-         else { return false; }
+         catch (Exception e) { Logger.Log(e.Message); }
+
+         return false;
       }
 
       public bool ChangeStatus(long objectId)
       {
-         var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectId).SingleOrDefault();
-         if (user != null)
+         try
          {
-            user.UserStatus = user.UserStatus != true;
-            EFProvider.Instance.SaveEntity(user, EntityState.Modified);
-            return true;
+            var user = EFProvider.Instance.DbEntities.Users.Where(x => x.UserId == objectId).SingleOrDefault();
+            if (user != null)
+            {
+               user.UserStatus = user.UserStatus != true;
+               EFProvider.Instance.SaveEntity(user, EntityState.Modified);
+               return true;
+            }
          }
+         catch (Exception e) { Logger.Log(e.Message); }
+         
          return false;
       }
 

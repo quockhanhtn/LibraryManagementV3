@@ -2,7 +2,7 @@
 using LibraryManagement.ViewModel;
 using System.Windows;
 
-namespace LibraryManagement.View.EditWindow
+namespace LibraryManagement.View
 {
    /// <summary>
    /// Interaction logic for EditMemberWindow.xaml

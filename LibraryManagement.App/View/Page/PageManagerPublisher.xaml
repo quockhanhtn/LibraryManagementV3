@@ -13,6 +13,350 @@
              d:DesignHeight="{StaticResource PageDesignHeight}" d:DesignWidth="{StaticResource PageDesignWidth}"
              Background="{StaticResource PageBackgroundColor}" Foreground="{StaticResource PageForegroundColor}">
    <Grid>
-      <TextBlock Foreground="Black" Text="{Binding Path=Name, ElementName=pageManagerPublisher}" FontSize="20" />
+      <Grid.Resources>
+         <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="Margin" Value="5" />
+         </Style>
+
+         <Style TargetType="materialDesign:PackIcon">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Margin" Value="10 0" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+         </Style>
+      </Grid.Resources>
+
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition />
+         <ColumnDefinition Width="auto" />
+      </Grid.ColumnDefinitions>
+
+      <!-- List nhà xuất bản sách-->
+      <materialDesign:Card Grid.Column="0" Style="{StaticResource MaterialDesignPageCard}" Margin="5">
+         <Grid>
+            <Grid.RowDefinitions>
+               <RowDefinition Height="auto" />
+               <RowDefinition Height="auto" />
+               <RowDefinition />
+               <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <!-- CÁC CHUYÊN MỤC SÁCH-->
+            <TextBlock Grid.Row="0" Text="DANH SÁCH NHÀ XUẤT BẢN" Style="{StaticResource TitleTextBlock}" />
+
+            <!--Tìm kiếm và lọc-->
+            <Grid Grid.Row="1" Margin="10 0 10 30">
+               <Grid.ColumnDefinitions>
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="auto" />
+                  <ColumnDefinition Width="auto" />
+               </Grid.ColumnDefinitions>
+
+               <TextBox Grid.Column="0" x:Name="txtSearch" Style="{StaticResource MyTextBox}" Margin="10 0" FontSize="18"
+                        materialDesign:HintAssist.Hint="Tìm kiếm nhà xuất bản">
+                  <i:Interaction.Triggers>
+                     <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=txtSearch}" />
+                     </i:EventTrigger>
+                  </i:Interaction.Triggers>
+               </TextBox>
+
+               <DockPanel Grid.Column="1" Margin="5 0" LastChildFill="True">
+                  <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                ToolTip="Hiển thị các nhà xuất bản đã xóa" VerticalAlignment="Bottom"
+                                IsChecked="{Binding IsShowHiddenPublisher, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                  <TextBlock Text="Hiển thị NXB đã ẩn" Foreground="Black" FontWeight="Normal" FontSize="16" Margin="10 0" VerticalAlignment="Bottom" />
+               </DockPanel>
+
+               <ToggleButton x:Name="chkViewDetailInfo" Margin="0 10 0 -7" Grid.Column="2" Style="{StaticResource MaterialDesignActionToggleButton}"
+                             ToolTip="Xem thông tin chi tiết" IsChecked="False">
+                  <ToggleButton.Content>
+                     <materialDesign:PackIcon Foreground="White" Kind="ArrowLeft" />
+                  </ToggleButton.Content>
+                  <materialDesign:ToggleButtonAssist.OnContent>
+                     <materialDesign:PackIcon Foreground="White" Kind="ArrowRight" />
+                  </materialDesign:ToggleButtonAssist.OnContent>
+               </ToggleButton>
+            </Grid>
+
+            <!-- List CHUYÊN MỤC SÁCH-->
+            <cc:MouseWheelScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+               <DataGrid Margin="10" CanUserSortColumns="True" CanUserAddRows="False" AutoGenerateColumns="False"
+                         materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" IsReadOnly="True"
+                         SelectedItem="{Binding DTOSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         ItemsSource="{Binding ListDTO, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                  <DataGrid.ContextMenu>
+                     <ContextMenu>
+                        <MenuItem Header="Sao chép Mã nhà xuất bản" Command="{Binding CopyIdCommand}" />
+                        <MenuItem Header="Sao chép Tên nhà xuất bản" Command="{Binding CopyNameCommand}" />
+                        <Separator />
+                        <MenuItem Header="Ẩn nhà xuất bản" Command="{Binding StatusOffCommand}" />
+                        <MenuItem Header="Hiển thị nhà xuất bản" Command="{Binding StatusOnCommand}" />
+                        <Separator />
+                        <MenuItem Header="Xóa nhà xuất bản" Command="{Binding DeleteCommand}" />
+                     </ContextMenu>
+                  </DataGrid.ContextMenu>
+
+                  <DataGrid.Columns>
+                     <!--Mã NXB-->
+                     <DataGridTextColumn Binding="{Binding PublisherId}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                              <Setter Property="ContentTemplate">
+                                 <Setter.Value>
+                                    <DataTemplate>
+                                       <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                                             <Run Text="Mã"></Run>
+                                             <LineBreak />
+                                             <Run Text="NXB"></Run>
+                                       </TextBlock>
+                                    </DataTemplate>
+                                 </Setter.Value>
+                              </Setter>
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
+
+                     <!--Tên NXB-->
+                     <DataGridTextColumn Binding="{Binding PublisherName}" Header="Tên nhà xuất bản" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                     <!--SDT-->
+                     <DataGridTextColumn Binding="{Binding PhoneNumber}" Header="Số điện thoại" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                     <DataGridTextColumn Binding="{Binding Address}" Header="Địa chỉ" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                     <DataGridTextColumn Binding="{Binding Email}" Header="Email" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                     <DataGridTextColumn Binding="{Binding Website}" Header="Trang web" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}" />
+
+                     <!--Số lượng đầu sách-->
+                     <materialDesign:DataGridTextColumn Binding="{Binding NumberOfBook}" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                              <Setter Property="ContentTemplate">
+                                 <Setter.Value>
+                                    <DataTemplate>
+                                       <TextBlock TextWrapping="Wrap" TextAlignment="Center" IsHitTestVisible="False">
+                                             <Run Text="Số lượng"></Run>
+                                             <LineBreak />
+                                             <Run Text="đầu sách"></Run>
+                                       </TextBlock>
+                                    </DataTemplate>
+                                 </Setter.Value>
+                              </Setter>
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </materialDesign:DataGridTextColumn>
+
+                     <!--Trạng thái-->
+                     <materialDesign:DataGridTextColumn Binding="{Binding StatusDisplay}" Header="Trạng thái" Width="100" EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        <DataGridTextColumn.HeaderStyle>
+                           <Style TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                           <Style TargetType="{x:Type TextBlock}">
+                              <Setter Property="HorizontalAlignment" Value="Center" />
+                           </Style>
+                        </DataGridTextColumn.ElementStyle>
+                     </materialDesign:DataGridTextColumn>
+                  </DataGrid.Columns>
+               </DataGrid>
+            </cc:MouseWheelScrollViewer>
+
+            <materialDesign:Snackbar MessageQueue="{Binding Path=SnackbarMessageQueue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="2" VerticalAlignment="Bottom" />
+
+            <!--Button after datagrid-->
+            <StackPanel Grid.Row="3" HorizontalAlignment="Right" Margin="10 0" Orientation="Horizontal">
+               <StackPanel.Resources>
+                  <Style TargetType="Grid">
+                     <Setter Property="Width" Value="160" />
+                     <Setter Property="Margin" Value="0 2 0 0" />
+                  </Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                     <Setter Property="Width" Value="200" />
+                     <Setter Property="Margin" Value="5" />
+                  </Style>
+                  <Style TargetType="TextBlock">
+                     <Setter Property="VerticalAlignment" Value="Center" />
+                     <Setter Property="HorizontalAlignment" Value="Right" />
+                  </Style>
+                  <Style TargetType="materialDesign:PackIcon">
+                     <Setter Property="Width" Value="25" />
+                     <Setter Property="Height" Value="25" />
+                  </Style>
+               </StackPanel.Resources>
+
+               <!--Btn Export Excell-->
+               <Button Command="{Binding ExportToExcelCommand}" ToolTip="Xuất danh sách thủ thư ra file Excel">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="FileExcel" />
+                     <TextBlock Text="XUẤT FILE EXCEL" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+
+               <!--Button Add-->
+               <Button Command="{Binding AddCommand}" ToolTip="Thêm nhà xuất bản mới">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Add" />
+                     <TextBlock Text="THÊM CHUYÊN MỤC" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+
+               <!--Button Update-->
+               <Button Command="{Binding UpdateCommand}" ToolTip="Chỉnh sửa nhà xuất bản">
+                  <Grid>
+                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition />
+                     </Grid.ColumnDefinitions>
+                     <materialDesign:PackIcon Grid.Column="0" Kind="Edit" />
+                     <TextBlock Text="SỬA CHUYÊN MỤC" Grid.Column="1"></TextBlock>
+                  </Grid>
+               </Button>
+            </StackPanel>
+         </Grid>
+      </materialDesign:Card>
+
+      <GroupBox Style="{DynamicResource MaterialDesignCardGroupBox}" Grid.Column="1" Margin="0 5 5 5" Padding="10 10 10 0" Width="350" 
+                Visibility="{Binding ElementName=chkViewDetailInfo, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
+         <GroupBox.Header>
+            <TextBlock Margin="8 -3 10 3" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+               <Run Text="Nhà xuất bản #"/>
+               <Run FontWeight="SemiBold" Text="{Binding DTOSelected.PublisherId, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+            </TextBlock>
+         </GroupBox.Header>
+         <GroupBox.Content>
+            <Grid>
+               <Grid.RowDefinitions>
+                  <RowDefinition/>
+                  <RowDefinition Height="50"/>
+               </Grid.RowDefinitions>
+
+               <!---Thông tin Thủ thư-->
+               <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" VerticalAlignment="Center">
+                  <StackPanel>
+                     <StackPanel.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}" >
+                           <Setter Property="Margin" Value="10 10" />
+                        </Style>
+                        <Style TargetType="cc:DigitTextBox" BasedOn="{StaticResource MyTextBox}" >
+                           <Setter Property="Margin" Value="10 10" />
+                        </Style>
+                     </StackPanel.Resources>
+
+                     <!--Tên nhà xuất bản-->
+                     <TextBox materialDesign:HintAssist.Hint="Tên nhà xuất bản"
+                              Text="{Binding Path=DTOSelected.PublisherName, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+
+
+                     <!---Số điện thoại-->
+                     <TextBox materialDesign:HintAssist.Hint="Điện thoại" MinLines="1"
+                              Text="{Binding Path=DTOSelected.PhoneNumber, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+
+                     <!--Địa chỉ-->
+                     <TextBox materialDesign:HintAssist.Hint="Địa chỉ" MinLines="3" TextWrapping="WrapWithOverflow"
+                              Text="{Binding Path=DTOSelected.Address, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+
+                     <!---Email-->
+                     <TextBox materialDesign:HintAssist.Hint="Email"
+                              Text="{Binding Path=DTOSelected.Email, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+                     
+                     <!---Trang web-->
+                     <TextBox materialDesign:HintAssist.Hint="Trang web"
+                              Text="{Binding Path=DTOSelected.Website, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+
+                     <!---Số lượng đầu sách-->
+                     <TextBox materialDesign:HintAssist.Hint="Số lượng đầu sách"
+                              Text="{Binding Path=DTOSelected.NumberOfBook, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+                     </TextBox>
+                  </StackPanel>
+               </ScrollViewer>
+
+               <!--Button-->
+               <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+                  <StackPanel.Resources>
+                     <Style TargetType="Grid">
+                        <Setter Property="Width" Value="65" />
+                     </Style>
+                     <Style TargetType="Button" BasedOn="{StaticResource DarkBlueButton}">
+                        <Setter Property="Width" Value="100" />
+                        <Setter Property="Margin" Value="5" />
+                     </Style>
+                     <Style TargetType="TextBlock">
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
+                     </Style>
+                     <Style TargetType="materialDesign:PackIcon">
+                        <Setter Property="Width" Value="25" />
+                        <Setter Property="Height" Value="25" />
+                     </Style>
+                  </StackPanel.Resources>
+
+                  <!--Button Status Off-->
+                  <Button Command="{Binding StatusOffCommand}" ToolTip="Ẩn nhà xuất bản">
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0" Kind="EyeOff" />
+                        <TextBlock Text="ẨN" Grid.Column="1"></TextBlock>
+                     </Grid>
+                  </Button>
+                  <!--Button Status On-->
+                  <Button Command="{Binding StatusOnCommand}" ToolTip="Hiện nhà xuất bản">
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0" Kind="Eye" />
+                        <TextBlock Text="HIỆN" Grid.Column="1"></TextBlock>
+                     </Grid>
+                  </Button>
+
+                  <Button Command="{Binding DeleteCommand}" ToolTip="Xóa nhà xuất bản">
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="auto" />
+                           <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:PackIcon Grid.Column="0" Kind="Delete" />
+                        <TextBlock Text="XÓA" Grid.Column="1"></TextBlock>
+                     </Grid>
+                  </Button>
+               </StackPanel>
+            </Grid>
+         </GroupBox.Content>
+      </GroupBox>
    </Grid>
 </UserControl>

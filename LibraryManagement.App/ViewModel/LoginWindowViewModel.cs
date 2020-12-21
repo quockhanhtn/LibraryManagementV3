@@ -93,9 +93,6 @@ namespace LibraryManagement.ViewModel
 
          LoginCommand = new RelayCommand<Window>((p) => { return p != null; }, (p) =>
          {
-            FindMemberWindow.Show(true);
-            FindMemberWindow.Show(false);
-
             User userLogin = null;
 
             WaitingDialog.Show(() =>

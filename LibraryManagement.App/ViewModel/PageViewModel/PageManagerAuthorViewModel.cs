@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.CustomControl;
 using LibraryManagement.Model;
 using LibraryManagement.Utils;
-using LibraryManagement.View.EditWindow;
+using LibraryManagement.View;
 using OfficeOpenXml;
 using System;
 using System.Threading;
@@ -84,7 +84,7 @@ namespace LibraryManagement.ViewModel
          {
             if (EditAuthorWindow.Show())
             {
-               ShowSnackbarMessage("Thêm chuyên mục thành công !");
+               ShowSnackbarMessage("Thêm tác giả thành công !");
                ReloadList();
             }
             else { ShowSnackbarMessage("Không có thay đổi"); }

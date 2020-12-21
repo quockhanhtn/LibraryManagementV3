@@ -1,7 +1,7 @@
 ﻿using LibraryManagement.CustomControl;
 using LibraryManagement.Model;
 using LibraryManagement.Utils;
-using LibraryManagement.View.EditWindow;
+using LibraryManagement.View;
 using OfficeOpenXml;
 using System;
 using System.Windows;

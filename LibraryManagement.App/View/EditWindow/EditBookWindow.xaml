@@ -1,16 +1,17 @@
-﻿<Window x:Class="LibraryManagement.View.EditAuthorWindow"
+﻿<Window x:Class="LibraryManagement.View.EditBookWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LibraryManagement.View" mc:Ignorable="d"
+        xmlns:local="clr-namespace:LibraryManagement.View"
+        mc:Ignorable="d"
         
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:cc="clr-namespace:LibraryManagement.CustomControl;assembly=LibraryManagement.CustomControl"
         
-        Title="Library Management" Icon="{StaticResource LibraryIcon}" x:Name="editAuthorWindow" 
+        Title="Library Management" Icon="{StaticResource LibraryIcon}" x:Name="editBookWindow" 
         Style="{StaticResource ResizeWindowNoBoder}" WindowStartupLocation="CenterScreen" 
         Height="300" Width="400">
 
@@ -26,7 +27,7 @@
          <!--Title bar-->
          <cc:TitleBar x:Name="titleBar" Grid.Row="0" Grid.ColumnSpan="2"
                       MaximinButtonVisibility="Collapsed" MinimizeButtonVisibility="Collapsed" Foreground="White"
-                      Tag="{Binding ElementName=editAuthorWindow, Path=Title, UpdateSourceTrigger=PropertyChanged}"
+                      Tag="{Binding ElementName=editBookWindow, Path=Title, UpdateSourceTrigger=PropertyChanged}"
                       FontSize="16" Height="24" Background="#007acc">
          </cc:TitleBar>
 
@@ -38,18 +39,19 @@
             <StackPanel>
                <StackPanel.Resources>
                   <Style TargetType="TextBox" BasedOn="{StaticResource MyTextBox}"/>
+                  <Style TargetType="cc:DigitTextBox" BasedOn="{StaticResource MyTextBox}"/>
                   <Style TargetType="TextBlock" BasedOn="{StaticResource WarningTextBlock}"/>
                </StackPanel.Resources>
 
                <!---Tên tác giả-->
-               <TextBox materialDesign:HintAssist.Hint="Bút danh" MaxLength="40" x:Name="txtRealName"
+               <TextBox materialDesign:HintAssist.Hint="Bút danh" MaxLength="40" x:Name="txtTitle"
                         Text="{Binding EditObject.NickName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                <TextBlock Text="{Binding Path=ErrorNickName, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
 
-               <!---Tên thật-->
-               <TextBox materialDesign:HintAssist.Hint="Tên thật" MaxLength="50"
-                        Text="{Binding EditObject.Realname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
-               </TextBox>
+               <!---Tên-->
+               <cc:DigitTextBox materialDesign:HintAssist.Hint="Tên thật" MaxLength="3"
+                                Text="{Binding EditObject.Realname, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+               </cc:DigitTextBox>
                <TextBlock Text="{Binding Path=ErrorRealName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
             </StackPanel>
          </ScrollViewer>
@@ -80,8 +82,7 @@
 
             <!--Button Save-->
             <Button Grid.Column="0" IsDefault="True" ToolTip="Lưu"
-                    Command="{Binding SaveChangeCommand}" 
-                    CommandParameter="{Binding ElementName=editAuthorWindow}">
+                    Command="{Binding SaveChangeCommand}" CommandParameter="{Binding ElementName=editBookWindow}">
                <Grid>
                   <Grid.ColumnDefinitions>
                      <ColumnDefinition Width="auto" />
@@ -93,8 +94,7 @@
             </Button>
             <!--Button Cancel-->
             <Button Grid.Column="1" IsCancel="True" ToolTip="Hủy"
-                    Command="{Binding CanncelCommand}" 
-                    CommandParameter="{Binding ElementName=editAuthorWindow}">
+                    Command="{Binding CanncelCommand}" CommandParameter="{Binding ElementName=editBookWindow}">
                <Grid>
                   <Grid.ColumnDefinitions>
                      <ColumnDefinition Width="auto" />

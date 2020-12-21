@@ -17,5 +17,10 @@ namespace LibraryManagement.Utils
          }
          return result;
       }
+
+      static public void AddRange<T>(this ICollection<T> colletion, IEnumerable<T> range)
+      {
+         foreach (var item in range) { colletion.Add(item); }
+      }
    }
 }

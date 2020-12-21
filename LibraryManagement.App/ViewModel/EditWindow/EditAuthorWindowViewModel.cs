@@ -6,6 +6,9 @@ namespace LibraryManagement.ViewModel
 {
    public class EditAuthorWindowViewModel : EditWindowBaseViewModel<Author>
    {
+      public string ErrorNickName { get => errorNickName; set { errorNickName = value; OnPropertyChanged(); } }
+      public string ErrorRealName { get => errorRealName; set { errorRealName = value; OnPropertyChanged(); } }
+
       public EditAuthorWindowViewModel(Author authorEdit) : base(authorEdit)
       {
       }
@@ -14,8 +17,8 @@ namespace LibraryManagement.ViewModel
       {
          bool missingInput = false;
 
-         //if (!string.IsNullOrEmpty(EditObject.AuthorName)) { ErrorAuthorName = ""; }
-         //else { ErrorAuthorName = "Tên chuyên mục không được để trống"; missingInput = true; }
+         if (!string.IsNullOrEmpty(EditObject.NickName)) { ErrorNickName = ""; }
+         else { ErrorNickName = "Tên tác giả không được để trống"; missingInput = true; }
 
          //if (EditObject.LimitDays != 0) { ErrorLimitDays = ""; }
          //else { ErrorLimitDays = "Nhập số ngày cho mượn"; missingInput = true; }
@@ -34,7 +37,7 @@ namespace LibraryManagement.ViewModel
          else
          {
             Mode = EditMode.Add;
-            EditObject = new Author();
+            EditObject = new Author() { AuthorStatus = true };
             EditTitleText = "THÊM TÁC GIẢ MỚI";
          }
          OnPropertyChanged();
@@ -63,5 +66,8 @@ namespace LibraryManagement.ViewModel
             else { CustomMessageBox.Show("Cập nhật thông tin thất bại", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error); }
          }
       }
+
+      string errorNickName;
+      string errorRealName;
    }
 }

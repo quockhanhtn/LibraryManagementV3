@@ -5,7 +5,7 @@
    /// </summary>
    public partial class LoginWindow : System.Windows.Window
    {
-      public LoginWindow()
+     public LoginWindow()
       {
          InitializeComponent();
          txtLoginUid.Focus();

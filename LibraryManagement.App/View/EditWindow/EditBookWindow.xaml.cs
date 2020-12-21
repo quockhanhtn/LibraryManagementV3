@@ -5,19 +5,20 @@ using System.Windows;
 namespace LibraryManagement.View
 {
    /// <summary>
-   /// Interaction logic for EditLibrarianWindow.xaml
+   /// Interaction logic for EditBookWindow.xaml
    /// </summary>
-   public partial class EditLibrarianWindow : Window
+   public partial class EditBookWindow : Window
    {
-      public EditLibrarianWindow()
+      public EditBookWindow()
       {
          InitializeComponent();
+         txtTitle.Focus();
       }
 
-      public static bool Show(Librarian editLibrarian = null)
+      public static bool Show(BookInfo editBookInfo = null)
       {
-         var editDataContext = new EditLibrarianWindowViewModel(editLibrarian);
-         var addWindow = new EditLibrarianWindow()
+         var editDataContext = new EditBookWindowViewModel(editBookInfo);
+         var addWindow = new EditBookWindow()
          {
             DataContext = editDataContext
          };

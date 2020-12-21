@@ -2,7 +2,7 @@
 using LibraryManagement.ViewModel;
 using System.Windows;
 
-namespace LibraryManagement.View.EditWindow
+namespace LibraryManagement.View
 {
    /// <summary>
    /// Interaction logic for EditAuthorWindow.xaml
@@ -12,12 +12,13 @@ namespace LibraryManagement.View.EditWindow
       public EditAuthorWindow()
       {
          InitializeComponent();
+         this.txtRealName.Focus();
       }
 
       public static bool Show(Author editAuthor = null)
       {
          var editDataContext = new EditAuthorWindowViewModel(editAuthor);
-         var editWindow = new EditBookCategoryWindow()
+         var editWindow = new EditAuthorWindow()
          {
             DataContext = editDataContext
          };

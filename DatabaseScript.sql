@@ -1,4 +1,4 @@
-﻿USE master
+USE master
 GO
 
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'LibraryManagement')
@@ -19,20 +19,21 @@ GO
 -----------------------------------------------------------
 DROP TABLE IF EXISTS [dbo].[User]
 CREATE TABLE [dbo].[User](
-	[UserId] BIGINT IDENTITY(1, 1),
+	[UserId] BIGINT IDENTITY(10000, 1),
 	[FirstName] NVARCHAR(10) NULL,
 	[LastName] NVARCHAR(30) NULL,
 	[Gender] VARCHAR(1) NULL,						-- M = male, F = female, O = orther
 	[DateOfBirth] DATE NOT NULL,
-	[Ssn] VARCHAR(12) NULL,
 
 	[Address] NVARCHAR(100) NULL,
+	[Ssn] VARCHAR(12) NULL,
 	[PhoneNumber] VARCHAR(15) NULL,
 	[Email] VARCHAR(50) NULL,
 
 	[Username] VARCHAR(16) UNIQUE NOT NULL,
 	[Password] VARCHAR(32) NOT NULL,
 	[UserType] VARCHAR(15) NOT NULL DEFAULT 'MEMBER',	-- loại tài khoản admin = 'ADMIN', thủ thư = 'LIBRARIAN', độc giả = 'MEMBER', chưa xác thực thông tin = 'UN_VERIFIED'
+	
 	[UserStatus] BIT DEFAULT 1 NOT NULL,
 	[Image] TEXT NULL
 )
@@ -60,6 +61,7 @@ ALTER TABLE [dbo].[Librarian] ADD CONSTRAINT [pk_librarian] PRIMARY KEY ([UserId
 ALTER TABLE [dbo].[Librarian] ADD CONSTRAINT [fk_user_librarian] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User]([UserId])
 GO
 
+
 -- tài khoản độc giả
 DROP TABLE IF EXISTS [dbo].[Member]
 CREATE TABLE [dbo].[Member] (
@@ -72,6 +74,7 @@ GO
 ALTER TABLE [dbo].[Member] ADD CONSTRAINT [pk_member] PRIMARY KEY ([UserId])
 ALTER TABLE [dbo].[Member] ADD CONSTRAINT [fk_user_member] FOREIGN KEY ([UserId]) REFERENCES [dbo].[User]([UserId])
 GO
+
 
 --tác giả của sách
 DROP TABLE IF EXISTS [dbo].[Author]
@@ -134,8 +137,9 @@ CREATE TABLE [dbo].[BookInfo]
 	[Price] DECIMAL(19, 0) NULL,				-- giá tiền
 
 	[Count] INT NOT NULL CHECK([Count] > 0),	-- số lượng cuốn sách
-	[BookInfoStatus] BIT DEFAULT 1 NULL,
-	[Image] TEXT NULL
+	[Image] TEXT NULL,
+
+	[BookInfoStatus] BIT DEFAULT 1 NOT NULL,
 )
 GO 
 ALTER TABLE [dbo].[BookInfo] ADD CONSTRAINT [PK_BookInfo] PRIMARY KEY ([BookInfoId])
@@ -202,33 +206,12 @@ ALTER TABLE [dbo].[Return] ADD CONSTRAINT [fk_return_borrow] FOREIGN KEY ([Borro
 ALTER TABLE [dbo].[Return] ADD CONSTRAINT [fk_return_librarian] FOREIGN KEY([LibrarianId]) REFERENCES [dbo].[Librarian]([UserId])
 GO
 
------------------------------------------------------------
------------FUNCTION----------------------------------------
------------------------------------------------------------
-CREATE OR ALTER FUNCTION [UFN_CheckPhoneNumber] (@PHONE_NUMBER_TO_CHECK NVARCHAR(15))
-RETURNS BIT AS 
-BEGIN
-	DECLARE @C INT
-	SELECT @C = COUNT(*) FROM [dbo].[User] AS U WHERE @PHONE_NUMBER_TO_CHECK = [U].[PhoneNumber] 
-	RETURN (CASE WHEN @C > 0 THEN 0 ELSE 1 END)
-END
-GO
-
-CREATE OR ALTER FUNCTION [UFN_CheckEmail] (@EMAIL_TO_CHECK NVARCHAR(50))
-RETURNS BIT AS 
-BEGIN
-	DECLARE @C INT
-	SELECT @C = COUNT(*) FROM [dbo].[User] AS U WHERE @EMAIL_TO_CHECK = [U].[Email]
-	RETURN (CASE WHEN @C > 0 THEN 0 ELSE 1 END)
-END
-GO
 
 
 -----------------------------------------------------------
 -----------PROCEDURE---------------------------------------
 -----------------------------------------------------------
-CREATE OR ALTER PROCEDURE [USP_InsertBookItem]
-	@BOOK_INFO_ID BIGINT
+CREATE OR ALTER PROCEDURE [USP_InsertBookItem] @BOOK_INFO_ID BIGINT
 AS BEGIN
 	DECLARE @BOOK_COUNT INT, @i INT = 1, @BOOK_ITEM_ID NVARCHAR(20)
 	SELECT @BOOK_COUNT = [Count] FROM [dbo].[BookInfo] WHERE [BookInfoId] = @BOOK_INFO_ID
@@ -268,20 +251,22 @@ AS BEGIN
 END
 GO
 
+
 -----------------------------------------------------------
 -----------Insert sample data------------------------------
 -----------------------------------------------------------
-
-
 -----------------------------
 -- Admin account ------------
 -- username: admin ----------
 -- password: 12 -------------
 -----------------------------
-INSERT INTO [dbo].[User] ( [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserType], [UserStatus])
+SET IDENTITY_INSERT [dbo].[User] ON
+INSERT INTO [dbo].[User] ( [UserId], [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserType], [UserStatus])
 VALUES 
-	(N'Khánh',  N'Lâm', 'F', '20000520', '123456789', N'', '0000000000', NULL, 'admin', '7e7175c2e20d590551e9fb500bc38c8c', 'ADMIN', 1)					-- UID = 1
+	(1, N'Khánh',  N'Lâm', 'M', '20000520', '123456789', N'', '0000000000', NULL, 'admin', '7e7175c2e20d590551e9fb500bc38c8c', 'ADMIN', 1),
+	(2, N'Khánh',  N'Lâm', 'M', '20000209', '123456780', N'', '0000000001', NULL, 'sys', '7e7175c2e20d590551e9fb500bc38c8c', 'ADMIN', 2)
 GO
+SET IDENTITY_INSERT [dbo].[User] OFF
 
 
 ----------------------------------------------------------
@@ -290,31 +275,33 @@ GO
 -- password: 12 ------------------------------------------
 -- password (orther): 000000 -----------------------------
 ----------------------------------------------------------
-INSERT INTO [dbo].[User] ( [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserType], [UserStatus])
+SET IDENTITY_INSERT [dbo].[User] ON
+INSERT INTO [dbo].[User] ( [UserId], [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserType], [UserStatus])
 VALUES 
-	(N'Bích',  N'Nguyễn Ngọc', 'F', '20000331', '786522653964', N'Quận 7, Hồ Chí Minh', '0000000001', NULL, 'librarian', '7e7175c2e20d590551e9fb500bc38c8c', 'LIBRARIAN', 1),											-- UID = 2
-	(N'Giang',  N'Lê Trường', 'M', '19951203', '596522653964', N'26 Võ Văn Ngân, Quận Thủ Đức, Hồ Chí Minh', '0965632521', 'giangle1995@gmail.com', 'letruonggiang', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),	-- UID = 3
-	(N'Minh',  N'Mai Sỹ', 'O', '19940228', '496229526', N'30C Lê Văn Chí, Quận Thủ Đức, Hồ Chí Minh', '0339566263', 'msm1994@yahoo.com', 'msm1994', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),					-- UID = 4
-	(N'Thu',  N'Lê Thị', 'O', '19980214', '261626546455', N'8 Tân Lập, Quận 9, Hồ Chí Minh', '0368465655', 'thult@gmail.com', 'thult', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),									-- UID = 5
-	(N'Toàn',  N'Cao Văn', 'M', '19950831', '344643356', N'24 Hồ Văn Tư, Quận Thủ Đức, Hồ Chí Minh', '0945641535', 'toancv@outlook.com', 'toancv', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),						-- UID = 6
-	(N'Cúc',  N'Nguyễn Thị Thu', 'F', '19941002', '463786434', N'224 Lê Văn Việt, Quận 9, Hồ Chí Minh', '0914846315', 'cuntt@hotmail.com', 'cucntt', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),					-- UID = 7
-	(N'Việt',  N'Trần Quốc', 'M', '19970209', '243624766483', N'27 Thống Nhất, Dĩ An, Bình Dương', '0901316265', 'viettqq@yahoo.com', 'viettq', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),						-- UID = 8
-	(N'Sơn',  N'Huỳnh Văn', 'M', '19930402', '796289529', N'18A, đường DT 743B , Thuận An, Bình Dương', '0943325968', 'sonhv@gmail.com', 'sonhv', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),						-- UID = 9
-	(N'Mi',  N'Lê Thị Ngọc', 'F', '19951218', '232355657', N'14/2 Xô Viết Nghệ Tĩnh, Bình Thạnh, Hồ Chí Minh', '0968454664', 'miltn@gmail.com', 'miltn', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),				-- UID = 10
-	(N'Hương',  N'Võ Thu', 'F', '19920112', '786345586521', N'20 Hồ Tùng Mậu, Quận 1, HCM', '0927893532', 'huongvt@gmail.com', 'huongvo', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1)								-- UID = 11
+	(10000, N'Bích',  N'Nguyễn Ngọc', 'F', '20000331', '786522653964', N'Quận 7, Hồ Chí Minh', '0000000002', NULL, 'librarian', '7e7175c2e20d590551e9fb500bc38c8c', 'LIBRARIAN', 1),
+	(10001, N'Giang',  N'Lê Trường', 'M', '19951203', '596522653964', N'26 Võ Văn Ngân, Quận Thủ Đức, Hồ Chí Minh', '0965632521', 'giangle1995@gmail.com', 'letruonggiang', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),
+	(10002, N'Minh',  N'Mai Sỹ', 'O', '19940228', '496229526', N'30C Lê Văn Chí, Quận Thủ Đức, Hồ Chí Minh', '0339566263', 'msm1994@yahoo.com', 'msm1994', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),
+	(10003, N'Thu',  N'Lê Thị', 'O', '19980214', '261626546455', N'8 Tân Lập, Quận 9, Hồ Chí Minh', '0368465655', 'thult@gmail.com', 'thult', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),
+	(10004, N'Toàn',  N'Cao Văn', 'M', '19950831', '344643356', N'24 Hồ Văn Tư, Quận Thủ Đức, Hồ Chí Minh', '0945641535', 'toancv@outlook.com', 'toancv', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),
+	(10005, N'Cúc',  N'Nguyễn Thị Thu', 'F', '19941002', '463786434', N'224 Lê Văn Việt, Quận 9, Hồ Chí Minh', '0914846315', 'cuntt@hotmail.com', 'cucntt', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 0),
+	(10006, N'Việt',  N'Trần Quốc', 'M', '19970209', '243624766483', N'27 Thống Nhất, Dĩ An, Bình Dương', '0901316265', 'viettqq@yahoo.com', 'viettq', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),
+	(10007, N'Sơn',  N'Huỳnh Văn', 'M', '19930402', '796289529', N'18A, đường DT 743B , Thuận An, Bình Dương', '0943325968', 'sonhv@gmail.com', 'sonhv', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),
+	(10008, N'Mi',  N'Lê Thị Ngọc', 'F', '19951218', '232355657', N'14/2 Xô Viết Nghệ Tĩnh, Bình Thạnh, Hồ Chí Minh', '0968454664', 'miltn@gmail.com', 'miltn', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1),
+	(10009, N'Hương',  N'Võ Thu', 'F', '19920112', '786345586521', N'20 Hồ Tùng Mậu, Quận 1, HCM', '0927893532', 'huongvt@gmail.com', 'huongvo', 'e73adf9842e38aab89b6a8b9c8824051', 'LIBRARIAN', 1)
 GO
+SET IDENTITY_INSERT [dbo].[User] OFF
 INSERT INTO [dbo].[Librarian] ( [UserId], [StartDate], [Salary] )
 VALUES
-	(2, '20181025', 8000000),
-	(3, '20181102', 6500000),
-	(4, '20190103', 5500000),
-	(5, '20190605', 3500000),
-	(6, '20190924', 4500000),
-	(7, '20191031', 7500000),
-	(8, '20191104', 8500000),
-	(9, '20200301', 6800000),
-	(10, '20200414', 4200000),
-	(11, '20200512', 5400000)
+	(10000, '20181025', 8000000),
+	(10001, '20181102', 6500000),
+	(10002, '20190103', 5500000),
+	(10003, '20190605', 3500000),
+	(10004, '20190924', 4500000),
+	(10005, '20191031', 7500000),
+	(10006, '20191104', 8500000),
+	(10007, '20200301', 6800000),
+	(10008, '20200414', 4200000),
+	(10009, '20200512', 5400000)
 GO
 
 ----------------------------------------------------------
@@ -323,31 +310,33 @@ GO
 -- password: 12 ------------------------------------------
 -- password (orther): 000000 -----------------------------
 ----------------------------------------------------------
-INSERT INTO [dbo].[User] ( [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserStatus])
+SET IDENTITY_INSERT [dbo].[User] ON
+INSERT INTO [dbo].[User] ([UserId], [FirstName], [LastName], [Gender], [DateOfBirth], [Ssn], [Address], [PhoneNumber], [Email], [Username], [Password], [UserStatus])
 VALUES 
-	(N'Ngọc',  N'Nguyễn Ngọc', 'F', '20000331', '563178953', N'Quận 7, Hồ Chí Minh', '0000000002', NULL, 'member', '7e7175c2e20d590551e9fb500bc38c8c', 1),														-- UID = 12
-	(N'Khải',  N'Lê Trường', 'M', '19951203', '522532456133', N'26 Võ Văn Ngân, Quận Thủ Đức, Hồ Chí Minh', '0965632000', 'khailt@gmail.com', '522532456133', 'e73adf9842e38aab89b6a8b9c8824051', 0),		-- UID = 13
-	(N'Hoàng',  N'Phan Văn', 'O', '19940228', '003259526', N'30C Lê Văn Chí, Quận Thủ Đức, Hồ Chí Minh', '0367566263', 'hangpv@yahoo.com', '003259526', 'e73adf9842e38aab89b6a8b9c8824051', 1),					-- UID = 14
-	(N'Nhi',  N'Võ Thị Yến', 'O', '19980214', '260022546455', N'8 Tân Lập, Quận 9, Hồ Chí Minh', '0396565655', 'nhivty@gmail.com', '260022546455', 'e73adf9842e38aab89b6a8b9c8824051', 1),									-- UID = 15
-	(N'Thắng',  N'Đinh Công', 'M', '19950831', '086343356', N'24 Hồ Văn Tư, Quận Thủ Đức, Hồ Chí Minh', '0900041535', 'thangdc@outlook.com', '086343356', 'e73adf9842e38aab89b6a8b9c8824051', 0),					-- UID = 16
-	(N'Hường',  N'Trần Bích', 'F', '19941002', '463786059', N'224 Lê Văn Việt, Quận 9, Hồ Chí Minh', '0914846012', 'huongtb@hotmail.com', '463786059', 'e73adf9842e38aab89b6a8b9c8824051', 0),					-- UID = 17
-	(N'Lâm',  N'Lê Sơn', 'M', '19970209', '243624023653', N'27 Thống Nhất, Dĩ An, Bình Dương', '0901316289', 'lamls@yahoo.com', '243624023653', 'e73adf9842e38aab89b6a8b9c8824051', 1),							-- UID = 18
-	(N'Đạt',  N'Hồ Văn', 'M', '19930402', '796200529', N'18A, đường DT 743B , Thuận An, Bình Dương', '0943325911', 'dathv@gmail.com', '796200529', 'e73adf9842e38aab89b6a8b9c8824051', 1),						-- UID = 19
-	(N'Cẩm',  N'Đinh Thị', 'F', '19951218', '230153689', N'14/2 Xô Viết Nghệ Tĩnh, Bình Thạnh, Hồ Chí Minh', '0963534664', 'camdt@gmail.com', '230153689', 'e73adf9842e38aab89b6a8b9c8824051', 1),				-- UID = 20
-	(N'Lụa',  N'Dương Thị', 'F', '19920112', '786860586521', N'20 Hồ Tùng Mậu, Quận 1, HCM', '0927003532', 'luadt@gmail.com', '786860586521', 'e73adf9842e38aab89b6a8b9c8824051', 1)								-- UID = 21
+	(10010, N'Ngọc',  N'Nguyễn Ngọc', 'F', '20000331', '563178953', N'Quận 7, Hồ Chí Minh', '0987654321', NULL, 'member', '7e7175c2e20d590551e9fb500bc38c8c', 1),
+	(10011, N'Khải',  N'Lê Trường', 'M', '19951203', '522532456133', N'26 Võ Văn Ngân, Quận Thủ Đức, Hồ Chí Minh', '0965632000', 'khailt@gmail.com', '522532456133', 'e73adf9842e38aab89b6a8b9c8824051', 0),
+	(10012, N'Hoàng',  N'Phan Văn', 'O', '19940228', '003259526', N'30C Lê Văn Chí, Quận Thủ Đức, Hồ Chí Minh', '0367566263', 'hangpv@yahoo.com', '003259526', 'e73adf9842e38aab89b6a8b9c8824051', 1),
+	(10013, N'Nhi',  N'Võ Thị Yến', 'O', '19980214', '260022546455', N'8 Tân Lập, Quận 9, Hồ Chí Minh', '0396565655', 'nhivty@gmail.com', '260022546455', 'e73adf9842e38aab89b6a8b9c8824051', 1),
+	(10014, N'Thắng',  N'Đinh Công', 'M', '19950831', '086343356', N'24 Hồ Văn Tư, Quận Thủ Đức, Hồ Chí Minh', '0900041535', 'thangdc@outlook.com', '086343356', 'e73adf9842e38aab89b6a8b9c8824051', 0),
+	(10015, N'Hường',  N'Trần Bích', 'F', '19941002', '463786059', N'224 Lê Văn Việt, Quận 9, Hồ Chí Minh', '0914846012', 'huongtb@hotmail.com', '463786059', 'e73adf9842e38aab89b6a8b9c8824051', 0),
+	(10016, N'Lâm',  N'Lê Sơn', 'M', '19970209', '243624023653', N'27 Thống Nhất, Dĩ An, Bình Dương', '0901316289', 'lamls@yahoo.com', '243624023653', 'e73adf9842e38aab89b6a8b9c8824051', 1),
+	(10017, N'Đạt',  N'Hồ Văn', 'M', '19930402', '796200529', N'18A, đường DT 743B , Thuận An, Bình Dương', '0943325911', 'dathv@gmail.com', '796200529', 'e73adf9842e38aab89b6a8b9c8824051', 1),
+	(10018, N'Cẩm',  N'Đinh Thị', 'F', '19951218', '230153689', N'14/2 Xô Viết Nghệ Tĩnh, Bình Thạnh, Hồ Chí Minh', '0963534664', 'camdt@gmail.com', '230153689', 'e73adf9842e38aab89b6a8b9c8824051', 1),
+	(10019, N'Lụa',  N'Dương Thị', 'F', '19920112', '786860586521', N'20 Hồ Tùng Mậu, Quận 1, HCM', '0927003532', 'luadt@gmail.com', '786860586521', 'e73adf9842e38aab89b6a8b9c8824051', 1)
 GO
+SET IDENTITY_INSERT [dbo].[User] OFF
 INSERT INTO [dbo].[Member] ([UserId], [RegisterDate], [ExpDate] )
 VALUES
-	(12, '20181025', '20210101'),
-	(13, '20181102', '20210101'),
-	(14, '20190103', '20210101'),
-	(15, '20190605', '20210101'),
-	(16, '20190924', '20210101'),
-	(17, '20191031', '20210101'),
-	(18, '20191104', '20210101'),
-	(19, '20200301', '20210101'),
-	(20, '20200414', '20210101'),
-	(21, '20200512', '20210101')
+	(10010, '20181025', '20210101'),
+	(10011, '20181102', '20210101'),
+	(10012, '20190103', '20210101'),
+	(10013, '20190605', '20210101'),
+	(10014, '20190924', '20210101'),
+	(10015, '20191031', '20210101'),
+	(10016, '20191104', '20210101'),
+	(10017, '20200301', '20210101'),
+	(10018, '20200414', '20210101'),
+	(10019, '20200512', '20210101')
 GO
 
 

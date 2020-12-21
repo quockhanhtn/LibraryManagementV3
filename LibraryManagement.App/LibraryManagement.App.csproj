@@ -117,9 +117,11 @@
     <Compile Include="Model\DataAccessLayer\UserDAL.cs" />
     <Compile Include="Model\ExtensionEntityModel\Author.cs" />
     <Compile Include="Model\ExtensionEntityModel\BookCategory.cs" />
+    <Compile Include="Model\ExtensionEntityModel\BookInfo.cs" />
     <Compile Include="Model\ExtensionEntityModel\Librarian.cs" />
     <Compile Include="Enum\EStatusFillter.cs" />
     <Compile Include="Model\ExtensionEntityModel\Member.cs" />
+    <Compile Include="Model\ExtensionEntityModel\Publisher.cs" />
     <Compile Include="Model\ExtensionEntityModel\User.cs" />
     <Compile Include="Interface\IDataGet.cs" />
     <Compile Include="Interface\IDataUpdate.cs" />
@@ -160,8 +162,10 @@
     <Compile Include="ViewModel\BaseObject\EditWindowBaseViewModel.cs" />
     <Compile Include="ViewModel\EditWindow\EditAuthorWindowViewModel.cs" />
     <Compile Include="ViewModel\EditWindow\EditBookCategoryWindowViewModel.cs" />
+    <Compile Include="ViewModel\EditWindow\EditBookWindowViewModel.cs" />
     <Compile Include="ViewModel\EditWindow\EditLibrarianWindowViewModel.cs" />
     <Compile Include="ViewModel\EditWindow\EditMemberWindowViewModel.cs" />
+    <Compile Include="ViewModel\EditWindow\EditPublisherWindowViewModel.cs" />
     <Compile Include="ViewModel\FindMemberWindowViewModel.cs" />
     <Compile Include="ViewModel\LibrarianWindowViewModel.cs" />
     <Compile Include="ViewModel\LoginWindowViewModel.cs" />
@@ -185,11 +189,17 @@
     <Compile Include="View\EditWindow\EditBookCategoryWindow.xaml.cs">
       <DependentUpon>EditBookCategoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\EditWindow\EditBookWindow.xaml.cs">
+      <DependentUpon>EditBookWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditWindow\EditLibrarianWindow.xaml.cs">
       <DependentUpon>EditLibrarianWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditWindow\EditMemberWindow.xaml.cs">
       <DependentUpon>EditMemberWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditWindow\EditPublisherWindow.xaml.cs">
+      <DependentUpon>EditPublisherWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FindMemberWindow.xaml.cs">
       <DependentUpon>FindMemberWindow.xaml</DependentUpon>
@@ -257,11 +267,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\EditWindow\EditBookWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\EditWindow\EditLibrarianWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditWindow\EditMemberWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditWindow\EditPublisherWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

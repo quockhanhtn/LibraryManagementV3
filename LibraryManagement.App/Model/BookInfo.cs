@@ -30,7 +30,7 @@ namespace LibraryManagement.Model
         public string Size { get; set; }
         public Nullable<decimal> Price { get; set; }
         public int Count { get; set; }
-        public Nullable<bool> BookInfoStatus { get; set; }
+        public bool BookInfoStatus { get; set; }
         public string Image { get; set; }
     
         public virtual BookCategory BookCategory { get; set; }

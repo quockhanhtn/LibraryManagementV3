@@ -105,6 +105,8 @@ namespace LibraryManagement.Model
          return false;
       }
 
+      public bool CheckNameExits(string name) => EFProvider.Instance.DbEntities.Publishers.Where(p => p.PublisherName.Equals(name)).FirstOrDefault() != null;
+
       #region Singleton Declare
 
       public static PublisherDAL Instance
